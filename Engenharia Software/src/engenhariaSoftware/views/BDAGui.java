@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
@@ -131,11 +132,14 @@ public class BDAGui extends JFrame {
 				for(Status st: statusHome) {
 //					textArea.append(st.getUser().getName() + ": " + st.getText());
 //					textArea.append("\n");
+					System.out.println("Data: " + st.getCreatedAt());
 					String user = st.getUser().getName();
 					String text = st.getText();
 					long id = st.getId();
-					Tweet tweet = new Tweet(user, text, id);
-					model.addElement(tweet.getUserName() + tweet.getId());
+					Date createdAt = st.getCreatedAt();
+					Tweet tweet = new Tweet(user, text, id, createdAt);
+//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
+					model.addElement(tweet.confirmTweet());
 					listaTweets.add(tweet);
 					
 				}	
@@ -155,8 +159,10 @@ public class BDAGui extends JFrame {
 					String user = st.getUser().getName();
 					String text = st.getText();
 					long id = st.getId();
-					Tweet tweet = new Tweet(user, text, id);
-					model.addElement(tweet.getUserName() + tweet.getId());
+					Date createdAt = st.getCreatedAt();
+					Tweet tweet = new Tweet(user, text, id, createdAt);
+//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
+					model.addElement(tweet.confirmTweet());
 					listaTweets.add(tweet);
 				}	
 			}
@@ -172,15 +178,17 @@ public class BDAGui extends JFrame {
 				try {
 					QueryResult result = twitter.search(query);
 					List<Status> tweets = result.getTweets();
-					for(Status t: tweets) {
+					for(Status st: tweets) {
 //						textArea.append(t.getUser().getName() + ": " + t.getText());
 //						textArea.append("\n");
 //						model.addElement(t.getUser().getName() + ": " + t.getText());
-						String user = t.getUser().getName();
-						String text = t.getText();
-						long id = t.getId();
-						Tweet tweet = new Tweet(user, text, id);
-						model.addElement(tweet.getUserName() + tweet.getId());
+						String user = st.getUser().getName();
+						String text = st.getText();
+						long id = st.getId();
+						Date createdAt = st.getCreatedAt();
+						Tweet tweet = new Tweet(user, text, id, createdAt);
+//						model.addElement(tweet.getUserName() + tweet.getCreatedAt());
+						model.addElement(tweet.confirmTweet());
 						listaTweets.add(tweet);
 					}
 
@@ -214,7 +222,7 @@ public class BDAGui extends JFrame {
 				for(Tweet t: listaTweets) {
 					System.out.println(t.getId());
 					if(selectedValue != null && selectedValue.equals(t.confirmTweet())) {
-						textAreaTweet.append(t.getUserName() + ": ");
+						textAreaTweet.append(t.getUserName() + " | " + t.getCreatedAt());
 						textAreaTweet.append("\n\n");
 						textAreaTweet.append(t.getText());
 					}
@@ -437,7 +445,4 @@ public class BDAGui extends JFrame {
 		panelHelp.setLayout(gl_panelHelp);
 		contentPane.setLayout(gl_contentPane);
 	}
-	
-	
-
 }
