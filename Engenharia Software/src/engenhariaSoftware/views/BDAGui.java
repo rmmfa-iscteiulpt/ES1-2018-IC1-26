@@ -69,6 +69,9 @@ public class BDAGui extends JFrame {
 	private ArrayList<Tweet> listaTweets = new ArrayList<>();
 	private JTextArea textAreaTweet;
 	private JButton btnRetweet;
+	private JButton btnAEISCTETwitter;
+	private JButton btnBiblioISCTETwitter;
+	private JScrollPane scrollPaneTweet;
 
 	/**
 	 * Launch the application.
@@ -122,7 +125,8 @@ public class BDAGui extends JFrame {
 		
 		List<Status> statusHome = twitter.getHomeTimeline();
 		List<Status> statusIscte = twitter.getUserTimeline("iscteiul");
-		
+		List<Status> statusAEIscte = twitter.getUserTimeline("aeiscte");
+		List<Status> statusBiblioIscte = twitter.getUserTimeline("bibliotecaiscte");
 		
 		btnMyFeedTwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -165,6 +169,48 @@ public class BDAGui extends JFrame {
 					model.addElement(tweet.confirmTweet());
 					listaTweets.add(tweet);
 				}	
+			}
+		});
+
+		btnAEISCTETwitter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+//				textArea.setText("");
+				model.clear();
+				listaTweets.clear();
+				for(Status st: statusAEIscte) {
+//					textArea.append(st.getUser().getName() + ": " + st.getText());
+//					textArea.append("\n");
+//					model.addElement(st.getUser().getName() + ": " + st.getText());
+					String user = st.getUser().getName();
+					String text = st.getText();
+					long id = st.getId();
+					Date createdAt = st.getCreatedAt();
+					Tweet tweet = new Tweet(user, text, id, createdAt);
+//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
+					model.addElement(tweet.confirmTweet());
+					listaTweets.add(tweet);
+				}	
+			}
+		});
+		btnBiblioISCTETwitter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+//				textArea.setText("");
+				model.clear();
+				listaTweets.clear();
+				for(Status st: statusBiblioIscte) {
+//					textArea.append(st.getUser().getName() + ": " + st.getText());
+//					textArea.append("\n");
+//					model.addElement(st.getUser().getName() + ": " + st.getText());
+					String user = st.getUser().getName();
+					String text = st.getText();
+					long id = st.getId();
+					Date createdAt = st.getCreatedAt();
+					Tweet tweet = new Tweet(user, text, id, createdAt);
+//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
+					model.addElement(tweet.confirmTweet());
+					listaTweets.add(tweet);
+				}
 			}
 		});
 		
@@ -325,59 +371,87 @@ public class BDAGui extends JFrame {
 		textSearchFieldTwitter = new JTextField();
 		textSearchFieldTwitter.setColumns(10);
 		
-		listTwitter = new JList<>(model);
-		listTwitter.setBorder(new CompoundBorder());
-		listTwitter.setFont(new Font("Consolas", Font.PLAIN, 13));
-		
-		textAreaTweet = new JTextArea();
-		textAreaTweet.setEditable(false);
-		textAreaTweet.setFont(new Font("Consolas", Font.PLAIN, 13));
-		textAreaTweet.setWrapStyleWord(true);
-		textAreaTweet.setLineWrap(true);
-		
 		btnRetweet = new JButton("Retweet");
+		
+		btnAEISCTETwitter = new JButton("AEISCTE");
+		
+		JLabel lblTwitterLogo = new JLabel("");
+		lblTwitterLogo.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/TwitterLogo_128x128.png")));
+		
+		btnBiblioISCTETwitter = new JButton("Biblioteca ISCTE");
+		
+		scrollPaneTweet = new JScrollPane();
+		
+		JScrollPane scrollPaneTweetsList = new JScrollPane();
+		
+		
 		
 		
 		
 		GroupLayout gl_panelTwitter = new GroupLayout(panelTwitter);
 		gl_panelTwitter.setHorizontalGroup(
-			gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+			gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panelTwitter.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnRetweet)
+					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnISCTEIULTwitter, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+						.addComponent(btnMyFeedTwitter, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+						.addComponent(btnAEISCTETwitter, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+						.addComponent(btnBiblioISCTETwitter, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+						.addComponent(lblTwitterLogo))
+					.addGap(18)
+					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+							.addComponent(scrollPaneTweetsList, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+							.addComponent(scrollPaneTweet, GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
 						.addGroup(gl_panelTwitter.createSequentialGroup()
-							.addGroup(gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnMyFeedTwitter, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnISCTEIULTwitter, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(textAreaTweet)
-								.addComponent(listTwitter, GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE))))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 456, Short.MAX_VALUE)
+							.addComponent(btnRetweet)))
+					.addGap(18)
+					.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnSearchTwitter)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(14))
 		);
 		gl_panelTwitter.setVerticalGroup(
 			gl_panelTwitter.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelTwitter.createSequentialGroup()
-					.addGap(11)
-					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.BASELINE)
+				.addGroup(Alignment.TRAILING, gl_panelTwitter.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblTwitterLogo)
 						.addGroup(gl_panelTwitter.createSequentialGroup()
-							.addComponent(btnMyFeedTwitter)
-							.addGap(5)
-							.addComponent(btnISCTEIULTwitter))
-						.addComponent(listTwitter, GroupLayout.PREFERRED_SIZE, 343, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnSearchTwitter))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textAreaTweet, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnRetweet)
-					.addGap(15))
+							.addGroup(gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
+								.addGroup(Alignment.LEADING, gl_panelTwitter.createSequentialGroup()
+									.addComponent(btnMyFeedTwitter)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnISCTEIULTwitter)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnAEISCTETwitter)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnBiblioISCTETwitter))
+								.addGroup(gl_panelTwitter.createSequentialGroup()
+									.addGroup(gl_panelTwitter.createParallelGroup(Alignment.BASELINE)
+										.addComponent(scrollPaneTweetsList, GroupLayout.PREFERRED_SIZE, 364, GroupLayout.PREFERRED_SIZE)
+										.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnSearchTwitter))
+									.addPreferredGap(ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+									.addComponent(scrollPaneTweet, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnRetweet)))
+					.addContainerGap())
 		);
+		
+		listTwitter = new JList<>(model);
+		scrollPaneTweetsList.setViewportView(listTwitter);
+		listTwitter.setBorder(new CompoundBorder());
+		listTwitter.setFont(new Font("Verdana", Font.PLAIN, 13));
+		
+		textAreaTweet = new JTextArea();
+		scrollPaneTweet.setViewportView(textAreaTweet);
+		textAreaTweet.setEditable(false);
+		textAreaTweet.setFont(new Font("Verdana", Font.PLAIN, 13));
+		textAreaTweet.setWrapStyleWord(true);
+		textAreaTweet.setLineWrap(true);
 		panelTwitter.setLayout(gl_panelTwitter);
 		
 		JPanel panelEmail = new JPanel();
