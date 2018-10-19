@@ -92,6 +92,7 @@ public class BDAGui extends JFrame {
 	}
 
 	/**
+	 * Constructor.
 	 * Create the frame.
 	 */
 	public BDAGui() {
@@ -102,11 +103,29 @@ public class BDAGui extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		createEventsFacebook();
+		createEventsMail();
 		
 	}
 	
 	/**
-	 * This method contains all of the code for creating events
+	 * This method contains all of the code for creating events for the Outlook app
+	 */
+	
+	private void createEventsMail() {
+		
+	}
+	
+	/**
+	 * This method contains all of the code for creating events for the Facebook app
+	 */
+
+	private void createEventsFacebook() {
+		
+	}
+
+	/**
+	 * This method contains all of the code for creating events for the Twitter app
 	 * @throws TwitterException 
 	 *
 	 */
@@ -119,7 +138,7 @@ public class BDAGui extends JFrame {
 		TwitterFactory tf = new TwitterFactory(cb.build());
 		twitter4j.Twitter twitter = tf.getInstance();
 		
-		twitter.getHomeTimeline();
+//		twitter.getHomeTimeline();
 		
 		//get username, status
 		
@@ -130,20 +149,16 @@ public class BDAGui extends JFrame {
 		
 		btnMyFeedTwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				textArea.setText("");
 				model.clear();
 				listaTweets.clear();
 				for(Status st: statusHome) {
-//					textArea.append(st.getUser().getName() + ": " + st.getText());
-//					textArea.append("\n");
 					System.out.println("Data: " + st.getCreatedAt());
 					String user = st.getUser().getName();
 					String text = st.getText();
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
-					model.addElement(tweet.confirmTweet());
+					model.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 					
 				}	
@@ -153,20 +168,15 @@ public class BDAGui extends JFrame {
 		
 		btnISCTEIULTwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				textArea.setText("");
 				model.clear();
 				listaTweets.clear();
 				for(Status st: statusIscte) {
-//					textArea.append(st.getUser().getName() + ": " + st.getText());
-//					textArea.append("\n");
-//					model.addElement(st.getUser().getName() + ": " + st.getText());
 					String user = st.getUser().getName();
 					String text = st.getText();
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
-					model.addElement(tweet.confirmTweet());
+					model.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 				}	
 			}
@@ -174,41 +184,30 @@ public class BDAGui extends JFrame {
 
 		btnAEISCTETwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				textArea.setText("");
 				model.clear();
 				listaTweets.clear();
 				for(Status st: statusAEIscte) {
-//					textArea.append(st.getUser().getName() + ": " + st.getText());
-//					textArea.append("\n");
-//					model.addElement(st.getUser().getName() + ": " + st.getText());
 					String user = st.getUser().getName();
 					String text = st.getText();
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
-					model.addElement(tweet.confirmTweet());
+					model.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 				}	
 			}
 		});
 		btnBiblioISCTETwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
-//				textArea.setText("");
 				model.clear();
 				listaTweets.clear();
 				for(Status st: statusBiblioIscte) {
-//					textArea.append(st.getUser().getName() + ": " + st.getText());
-//					textArea.append("\n");
-//					model.addElement(st.getUser().getName() + ": " + st.getText());
 					String user = st.getUser().getName();
 					String text = st.getText();
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-//					model.addElement(tweet.getUserName() + tweet.getCreatedAt());
-					model.addElement(tweet.confirmTweet());
+					model.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 				}
 			}
@@ -216,7 +215,6 @@ public class BDAGui extends JFrame {
 		
 		btnSearchTwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				textArea.setText("");
 				model.clear();
 				listaTweets.clear();
 				String searchTwitter = textSearchFieldTwitter.getText();
@@ -225,16 +223,12 @@ public class BDAGui extends JFrame {
 					QueryResult result = twitter.search(query);
 					List<Status> tweets = result.getTweets();
 					for(Status st: tweets) {
-//						textArea.append(t.getUser().getName() + ": " + t.getText());
-//						textArea.append("\n");
-//						model.addElement(t.getUser().getName() + ": " + t.getText());
 						String user = st.getUser().getName();
 						String text = st.getText();
 						long id = st.getId();
 						Date createdAt = st.getCreatedAt();
 						Tweet tweet = new Tweet(user, text, id, createdAt);
-//						model.addElement(tweet.getUserName() + tweet.getCreatedAt());
-						model.addElement(tweet.confirmTweet());
+						model.addElement(tweet.tweetHeader());
 						listaTweets.add(tweet);
 					}
 
@@ -267,25 +261,20 @@ public class BDAGui extends JFrame {
 				System.out.println(listaTweets);
 				for(Tweet t: listaTweets) {
 					System.out.println(t.getId());
-					if(selectedValue != null && selectedValue.equals(t.confirmTweet())) {
+					if(selectedValue != null && selectedValue.equals(t.tweetHeader())) {
 						textAreaTweet.append(t.getUserName() + " | " + t.getCreatedAt());
 						textAreaTweet.append("\n\n");
 						textAreaTweet.append(t.getText());
 					}
 				}
 			}
-//				String selectedTweet = (String) listTwitter.getSelectedValue();
-//				if(selectedTweet != null)
-//					JOptionPane.showMessageDialog(null, selectedTweet, "Tweet", JOptionPane.INFORMATION_MESSAGE);
-//			}
-			
 		});
 		
 	}
 
 	/**
 	 * This method contains all of the code for creating events
-	 * and initializing components
+	 * and initializing components of the GUI
 	 *
 	 */
 	private void initComponents() {
