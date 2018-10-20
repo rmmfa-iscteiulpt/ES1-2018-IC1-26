@@ -56,6 +56,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.CompoundBorder;
+import javax.swing.JSplitPane;
+import java.awt.GridLayout;
 
 public class BDAGui extends JFrame {
 
@@ -96,6 +98,7 @@ public class BDAGui extends JFrame {
 	 * Create the frame.
 	 */
 	public BDAGui() {
+		setResizable(false);
 		initComponents();
 		try {
 			createEventsTwitter();
@@ -298,36 +301,60 @@ public class BDAGui extends JFrame {
 		);
 		
 		JPanel panelHome = new JPanel();
+		panelHome.setToolTipText("P\u00E1gina inicial da aplica\u00E7\u00E3o.");
 		panelHome.setBackground(Color.WHITE);
 		tabbedPane.addTab("Home", null, panelHome, null);
 		
-		JLabel lblNewLabel_6 = new JLabel("Bom Dia Academia!");
-		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
+		JLabel lblBDAHome = new JLabel("Bom Dia Academia!");
+		lblBDAHome.setFont(new Font("Verdana", Font.BOLD, 14));
 		
-		JTextArea txtrdisclaimerEsta = new JTextArea();
-		txtrdisclaimerEsta.setBackground(Color.WHITE);
-		txtrdisclaimerEsta.setLineWrap(true);
-		txtrdisclaimerEsta.setWrapStyleWord(true);
-		txtrdisclaimerEsta.setText("**Disclaimer**\r\n\r\nEsta \u00E9 uma demonstra\u00E7\u00E3o daquilo em que deve consistir o trabalho de Engenharia de Software I.\r\n\r\nN\u00E3o \u00E9, nem de perto o produto final.");
-		txtrdisclaimerEsta.setEditable(false);
+		JTextArea txtHomeAnounces = new JTextArea();
+		txtHomeAnounces.setFont(new Font("Verdana", Font.PLAIN, 13));
+		txtHomeAnounces.setBackground(Color.WHITE);
+		txtHomeAnounces.setLineWrap(true);
+		txtHomeAnounces.setWrapStyleWord(true);
+		txtHomeAnounces.setText("\r\nBom dia Academia \u00E9 uma aplica\u00E7\u00E3o agregadora de conte\u00FAdo acad\u00E9mico das aplica\u00E7\u00F5es Facebook, Twitter e Outlook desenvolvida com recurso \u00E0s API's de cada aplica\u00E7\u00E3o de forma a ir buscar dados as essas plataformas.\r\n\r\nFuncionalidades v1: Twitter\r\n\r\n\u00DAltima atualiza\u00E7\u00E3o: 20/10/2018");
+		txtHomeAnounces.setEditable(false);
+		
+		JLabel lblOutlookHome = new JLabel("");
+		lblOutlookHome.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/if_Outlook_128x128.png")));
+		
+		JLabel lblFacebookHome = new JLabel("");
+		lblFacebookHome.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/if_Facebook_128x128.png")));
+		
+		JLabel lblTwitterHome = new JLabel("");
+		lblTwitterHome.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/if_twitter_128x128.png")));
 		GroupLayout gl_panelHome = new GroupLayout(panelHome);
 		gl_panelHome.setHorizontalGroup(
 			gl_panelHome.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelHome.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
-						.addComponent(txtrdisclaimerEsta, GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_6))
+					.addGap(275)
+					.addComponent(lblOutlookHome)
+					.addGap(18)
+					.addComponent(lblFacebookHome)
+					.addGap(18)
+					.addComponent(lblTwitterHome)
+					.addGap(283))
+				.addGroup(gl_panelHome.createSequentialGroup()
+					.addComponent(txtHomeAnounces, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addContainerGap())
+				.addGroup(gl_panelHome.createSequentialGroup()
+					.addComponent(lblBDAHome)
 					.addContainerGap())
 		);
 		gl_panelHome.setVerticalGroup(
 			gl_panelHome.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelHome.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblNewLabel_6)
+					.addComponent(lblBDAHome)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtrdisclaimerEsta, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(204, Short.MAX_VALUE))
+					.addComponent(txtHomeAnounces, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
+					.addGap(172)
+					.addGroup(gl_panelHome.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblFacebookHome)
+						.addComponent(lblOutlookHome)
+						.addComponent(lblTwitterHome))
+					.addContainerGap(72, Short.MAX_VALUE))
 		);
 		panelHome.setLayout(gl_panelHome);
 		
@@ -382,20 +409,20 @@ public class BDAGui extends JFrame {
 			gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panelTwitter.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnISCTEIULTwitter, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-						.addComponent(btnMyFeedTwitter, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-						.addComponent(btnAEISCTETwitter, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-						.addComponent(btnBiblioISCTETwitter, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(btnISCTEIULTwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnMyFeedTwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAEISCTETwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnBiblioISCTETwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblTwitterLogo))
 					.addGap(18)
 					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
-							.addComponent(scrollPaneTweetsList, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-							.addComponent(scrollPaneTweet, GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
+						.addComponent(scrollPaneTweetsList, GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
 						.addGroup(gl_panelTwitter.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, 456, Short.MAX_VALUE)
-							.addComponent(btnRetweet)))
+							.addGap(438)
+							.addComponent(btnRetweet)
+							.addGap(0, 0, Short.MAX_VALUE))
+						.addComponent(scrollPaneTweet, GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE))
 					.addGap(18)
 					.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -403,14 +430,16 @@ public class BDAGui extends JFrame {
 					.addGap(14))
 		);
 		gl_panelTwitter.setVerticalGroup(
-			gl_panelTwitter.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panelTwitter.createSequentialGroup()
+			gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panelTwitter.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblTwitterLogo)
-						.addGroup(gl_panelTwitter.createSequentialGroup()
-							.addGroup(gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, gl_panelTwitter.createSequentialGroup()
+						.addGroup(Alignment.LEADING, gl_panelTwitter.createSequentialGroup()
+							.addGap(419)
+							.addComponent(lblTwitterLogo))
+						.addGroup(Alignment.LEADING, gl_panelTwitter.createSequentialGroup()
+							.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelTwitter.createSequentialGroup()
 									.addComponent(btnMyFeedTwitter)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(btnISCTEIULTwitter)
@@ -418,13 +447,12 @@ public class BDAGui extends JFrame {
 									.addComponent(btnAEISCTETwitter)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(btnBiblioISCTETwitter))
-								.addGroup(gl_panelTwitter.createSequentialGroup()
-									.addGroup(gl_panelTwitter.createParallelGroup(Alignment.BASELINE)
-										.addComponent(scrollPaneTweetsList, GroupLayout.PREFERRED_SIZE, 364, GroupLayout.PREFERRED_SIZE)
-										.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnSearchTwitter))
-									.addPreferredGap(ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-									.addComponent(scrollPaneTweet, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_panelTwitter.createParallelGroup(Alignment.BASELINE)
+									.addComponent(scrollPaneTweetsList, GroupLayout.PREFERRED_SIZE, 364, GroupLayout.PREFERRED_SIZE)
+									.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(btnSearchTwitter)))
+							.addGap(11)
+							.addComponent(scrollPaneTweet, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnRetweet)))
 					.addContainerGap())
@@ -444,7 +472,7 @@ public class BDAGui extends JFrame {
 		panelTwitter.setLayout(gl_panelTwitter);
 		
 		JPanel panelEmail = new JPanel();
-		tabbedPane.addTab("E-mail", null, panelEmail, null);
+		tabbedPane.addTab("Outlook", null, panelEmail, null);
 		GroupLayout gl_panelEmail = new GroupLayout(panelEmail);
 		gl_panelEmail.setHorizontalGroup(
 			gl_panelEmail.createParallelGroup(Alignment.LEADING)
@@ -457,20 +485,13 @@ public class BDAGui extends JFrame {
 		panelEmail.setLayout(gl_panelEmail);
 		
 		JPanel panelHelp = new JPanel();
+		panelHelp.setBackground(Color.WHITE);
 		tabbedPane.addTab("Help", null, panelHelp, null);
 		
-		JLabel lblNewLabel = new JLabel("Informa\u00E7\u00F5es:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
+		JLabel lblInstructions = new JLabel("Instru\u00E7\u00F5es");
+		lblInstructions.setFont(new Font("Verdana", Font.BOLD, 14));
 		
-		JLabel lblNewLabel_2 = new JLabel("Frederico Pais\r\n");
-		
-		JLabel lblNewLabel_3 = new JLabel("Filipe Agostinho");
-		
-		JLabel lblNewLabel_4 = new JLabel("Rita Mendes Fonseca");
-		
-		JLabel lblNewLabel_5 = new JLabel("Sara Jessica");
-		
-		JLabel lblNewLabel_1 = new JLabel("Grupo 26");
+		JScrollPane scrollPane = new JScrollPane();
 		
 		GroupLayout gl_panelHelp = new GroupLayout(panelHelp);
 		gl_panelHelp.setHorizontalGroup(
@@ -478,34 +499,125 @@ public class BDAGui extends JFrame {
 				.addGroup(gl_panelHelp.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelHelp.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelHelp.createSequentialGroup()
-							.addComponent(lblNewLabel)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblNewLabel_1))
-						.addComponent(lblNewLabel_2)
-						.addComponent(lblNewLabel_3)
-						.addComponent(lblNewLabel_4)
-						.addComponent(lblNewLabel_5))
-					.addContainerGap(587, Short.MAX_VALUE))
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 958, Short.MAX_VALUE)
+						.addComponent(lblInstructions))
+					.addContainerGap())
 		);
 		gl_panelHelp.setVerticalGroup(
 			gl_panelHelp.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelHelp.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panelHelp.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
-						.addComponent(lblNewLabel_1))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel_2)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel_3)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel_4)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel_5)
-					.addContainerGap(291, Short.MAX_VALUE))
+					.addComponent(lblInstructions)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+					.addContainerGap())
 		);
+		
+		JTextArea txtrAquiPodeAprender = new JTextArea();
+		txtrAquiPodeAprender.setWrapStyleWord(true);
+		txtrAquiPodeAprender.setLineWrap(true);
+		txtrAquiPodeAprender.setText("Aqui pode aprender como utilizar a aplica\u00E7\u00E3o BDA e saber sobre todas as suas funcionalidades.\r\n\r\nHome:\r\n   - Introdu\u00E7\u00E3o \u00E0 aplica\u00E7\u00E3o;\r\n   - Vers\u00E3o e funcionalidades dispon\u00EDveis;\r\n   - Data da \u00FAltima atualiza\u00E7\u00E3o.\r\n\r\nFacebook:\r\n   - AINDA N\u00C3O EST\u00C1 DISPON\u00CDVEL.\r\n\r\nTwitter:\r\n   - \"My Feed\": Mostra os tweets mais recentes do seu feed de not\u00EDcias;\r\n   - \"ISCTE-IUL\": Mostra os tweets mais recentes da conta do ISCTE-IUL;\r\n   - \"AEISCTE\": Mostra os tweets mais recentes da conta da Associa\u00E7\u00E3o de Estudante do ISCTE-IUL;\r\n   - \"Biblioteca ISCTE\": Mostra os tweets mais recentes da conta da Biblioteca do ISCTE-IUL.\r\n   - \"Search\": Permite pesquisar por tweets que contenham a palavra introduzia pelo utilizador na barra de pesquisa;\r\n   - \"Retweet\": Permite retweetar. Para isto ser poss\u00EDvel \u00E9 necess\u00E1rio que tenha um tweet selecionado primeiro.\r\n\r\nOutlook:\r\n   - AINDA N\u00C3O EST\u00C1 DISPON\u00CDVEL.\r\n\r\nAbout Us:\r\n   - Informa\u00E7\u00F5es sobre os desenvolvedores desta aplica\u00E7\u00E3o.");
+		txtrAquiPodeAprender.setFont(new Font("Verdana", Font.PLAIN, 13));
+		scrollPane.setViewportView(txtrAquiPodeAprender);
 		panelHelp.setLayout(gl_panelHelp);
+		
+		JPanel panelAbout = new JPanel();
+		panelAbout.setBackground(Color.WHITE);
+		tabbedPane.addTab("About Us", null, panelAbout, null);
+		
+		JLabel lblAboutTitle = new JLabel("Desenvolvedores da Aplica\u00E7\u00E3o");
+		lblAboutTitle.setFont(new Font("Verdana", Font.BOLD, 14));
+		
+		JLabel lblRita = new JLabel("");
+		lblRita.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/Rita.jpg")));
+		
+		JLabel lblSara = new JLabel("");
+		lblSara.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/Sara.jpg")));
+		
+		JLabel lblFilipe = new JLabel("");
+		lblFilipe.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/Filipe.jpg")));
+		
+		JLabel lblFrederico = new JLabel("");
+		lblFrederico.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/Frederico.jpg")));
+		
+		JLabel lblNewLabel = new JLabel("Rita Mendes Fonseca, N\u00BA");
+		lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 12));
+		
+		JLabel lblNewLabel_1 = new JLabel("Sara J\u00E9ssica, N\u00BA");
+		lblNewLabel_1.setFont(new Font("Verdana", Font.BOLD, 12));
+		
+		JLabel lblNewLabel_2 = new JLabel("Filipe Agostinho, N\u00BA");
+		lblNewLabel_2.setFont(new Font("Verdana", Font.BOLD, 12));
+		
+		JLabel lblNewLabel_3 = new JLabel("Frederico Pais, N\u00BA 77707");
+		lblNewLabel_3.setFont(new Font("Verdana", Font.BOLD, 12));
+		
+		JLabel lblNewLabel_4 = new JLabel("Engenharia de Software I - Grupo 26");
+		lblNewLabel_4.setFont(new Font("Verdana", Font.BOLD, 12));
+		
+		JLabel lblISCTE = new JLabel("");
+		lblISCTE.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/ISCTE.jpg")));
+		GroupLayout gl_panelAbout = new GroupLayout(panelAbout);
+		gl_panelAbout.setHorizontalGroup(
+			gl_panelAbout.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelAbout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelAbout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblAboutTitle)
+						.addGroup(gl_panelAbout.createSequentialGroup()
+							.addComponent(lblRita)
+							.addGroup(gl_panelAbout.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelAbout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblNewLabel))
+								.addGroup(Alignment.TRAILING, gl_panelAbout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED, 702, Short.MAX_VALUE)
+									.addComponent(lblISCTE))))
+						.addGroup(gl_panelAbout.createSequentialGroup()
+							.addComponent(lblSara)
+							.addGap(18)
+							.addComponent(lblNewLabel_1))
+						.addGroup(gl_panelAbout.createSequentialGroup()
+							.addComponent(lblFilipe)
+							.addGap(18)
+							.addComponent(lblNewLabel_2))
+						.addGroup(gl_panelAbout.createSequentialGroup()
+							.addComponent(lblFrederico)
+							.addGap(18)
+							.addComponent(lblNewLabel_3)
+							.addPreferredGap(ComponentPlacement.RELATED, 616, Short.MAX_VALUE)
+							.addComponent(lblNewLabel_4)))
+					.addContainerGap())
+		);
+		gl_panelAbout.setVerticalGroup(
+			gl_panelAbout.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelAbout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblAboutTitle)
+					.addGap(18)
+					.addGroup(gl_panelAbout.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelAbout.createSequentialGroup()
+							.addGroup(gl_panelAbout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblRita)
+								.addComponent(lblNewLabel))
+							.addGap(18)
+							.addGroup(gl_panelAbout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblSara)
+								.addComponent(lblNewLabel_1))
+							.addGap(18)
+							.addGroup(gl_panelAbout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblFilipe)
+								.addComponent(lblNewLabel_2)))
+						.addComponent(lblISCTE))
+					.addGap(18)
+					.addGroup(gl_panelAbout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblFrederico)
+						.addGroup(gl_panelAbout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblNewLabel_3)
+							.addComponent(lblNewLabel_4)))
+					.addContainerGap(13, Short.MAX_VALUE))
+		);
+		panelAbout.setLayout(gl_panelAbout);
 		contentPane.setLayout(gl_contentPane);
 	}
 }
