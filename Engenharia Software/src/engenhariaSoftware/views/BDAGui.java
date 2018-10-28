@@ -540,13 +540,13 @@ public class BDAGui extends JFrame {
 		JLabel lblFrederico = new JLabel("");
 		lblFrederico.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/Frederico.jpg")));
 		
-		JLabel lblNewLabel = new JLabel("Rita Mendes Fonseca, N\u00BA");
+		JLabel lblNewLabel = new JLabel("Rita Mendes Fonseca, N\u00BA 68676");
 		lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 12));
 		
-		JLabel lblNewLabel_1 = new JLabel("Sara J\u00E9ssica, N\u00BA");
+		JLabel lblNewLabel_1 = new JLabel("Sara J\u00E9ssica, N\u00BA 73501");
 		lblNewLabel_1.setFont(new Font("Verdana", Font.BOLD, 12));
 		
-		JLabel lblNewLabel_2 = new JLabel("Filipe Agostinho, N\u00BA");
+		JLabel lblNewLabel_2 = new JLabel("Filipe Agostinho, N\u00BA 78011");
 		lblNewLabel_2.setFont(new Font("Verdana", Font.BOLD, 12));
 		
 		JLabel lblNewLabel_3 = new JLabel("Frederico Pais, N\u00BA 77707");
