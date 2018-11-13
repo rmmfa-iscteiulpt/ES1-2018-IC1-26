@@ -76,7 +76,7 @@ public class BDAGui extends JFrame {
 	private JScrollPane scrollPaneTweet;
 
 	/**
-	 * Launch the application.
+	 * Main to launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
