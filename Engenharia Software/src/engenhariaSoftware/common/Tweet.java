@@ -22,10 +22,10 @@ public class Tweet {
 	/**
 	 * Tweet constructor ,
 	 * initialization user, text, id, createAt.
-	 * @param user
-	 * @param text
-	 * @param id
-	 * @param createdAt
+	 * @param user this is the username 
+	 * @param text this is what the username wrote
+	 * @param id this is the username id
+	 * @param createdAt this is the date of the text
 	 */
 	
 	public Tweet(String user, String text, long id, Date createdAt) {
