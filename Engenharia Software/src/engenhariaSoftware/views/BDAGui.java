@@ -60,13 +60,17 @@ import javax.swing.JSplitPane;
 import java.awt.GridLayout;
 
 public class BDAGui extends JFrame {
-
+	
 	private JPanel contentPane;
+	
+	/*
+	 * Twitter
+	 */
 	private JButton btnMyFeedTwitter;
 	private JButton btnISCTEIULTwitter;
 	private JTextField textSearchFieldTwitter;
 	private JButton btnSearchTwitter;
-	private DefaultListModel<String> model = new DefaultListModel<>();
+	private DefaultListModel<String> modelTwitter = new DefaultListModel<>();
 	private JList listTwitter;
 	private ArrayList<Tweet> listaTweets = new ArrayList<>();
 	private JTextArea textAreaTweet;
@@ -74,6 +78,14 @@ public class BDAGui extends JFrame {
 	private JButton btnAEISCTETwitter;
 	private JButton btnBiblioISCTETwitter;
 	private JScrollPane scrollPaneTweet;
+	
+	/*
+	 * Facebook
+	 */
+	private DefaultListModel<String> modelFacebook = new DefaultListModel<>();
+	private JButton btnMyFeedFacebook;
+	private JTextArea textAreaPost;
+	private JList listFacebook;
 
 	/**
 	 * Main to launch the application.
@@ -112,7 +124,7 @@ public class BDAGui extends JFrame {
 	}
 	
 	/**
-	 * This method contains all of the code for creating events for the Outlook app
+	 * This method contains all of the code for creating events for the Email app
 	 */
 	
 	private void createEventsMail() {
@@ -122,8 +134,36 @@ public class BDAGui extends JFrame {
 	/**
 	 * This method contains all of the code for creating events for the Facebook app
 	 */
-
 	private void createEventsFacebook() {
+		
+		//*******VER createEventsTwitter()*******//
+		
+		//INSERIR API DO FACEBOOK AQUI
+		//
+		//
+		//
+		//
+		//
+		
+		//ACABAR A IMPLEMENTAÇÃO DO HANDLER DO BOTÃO PARA MOSTRAR OS POST DO FACEBOOK NA LISTA (VER TWIITER COMO FOI FEITO NO TWITTER)
+		btnMyFeedFacebook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modelFacebook.clear();
+			
+			}
+		});
+		
+		//ACABAR A IMPLEMENTAÇÃO DO HANDLER DA LISTA PARA SELECIONAR OS POSTS E APARECER NA TEXTAREA EM BAIXO
+		listFacebook.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				textAreaPost.setText("");
+				String selectedValue = (String) listFacebook.getSelectedValue();
+				System.out.println();
+				
+				}
+		});
+
 		
 	}
 
@@ -132,7 +172,6 @@ public class BDAGui extends JFrame {
 	 * @throws TwitterException 
 	 *
 	 */
-
 	private void createEventsTwitter() throws TwitterException {
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		
@@ -141,10 +180,7 @@ public class BDAGui extends JFrame {
 		TwitterFactory tf = new TwitterFactory(cb.build());
 		twitter4j.Twitter twitter = tf.getInstance();
 		
-//		twitter.getHomeTimeline();
-		
 		//get username, status
-		
 		List<Status> statusHome = twitter.getHomeTimeline();
 		List<Status> statusIscte = twitter.getUserTimeline("iscteiul");
 		List<Status> statusAEIscte = twitter.getUserTimeline("aeiscte");
@@ -152,7 +188,7 @@ public class BDAGui extends JFrame {
 		
 		btnMyFeedTwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				model.clear();
+				modelTwitter.clear();
 				listaTweets.clear();
 				for(Status st: statusHome) {
 					System.out.println("Data: " + st.getCreatedAt());
@@ -161,7 +197,7 @@ public class BDAGui extends JFrame {
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-					model.addElement(tweet.tweetHeader());
+					modelTwitter.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 					
 				}	
@@ -171,7 +207,7 @@ public class BDAGui extends JFrame {
 		
 		btnISCTEIULTwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				model.clear();
+				modelTwitter.clear();
 				listaTweets.clear();
 				for(Status st: statusIscte) {
 					String user = st.getUser().getName();
@@ -179,7 +215,7 @@ public class BDAGui extends JFrame {
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-					model.addElement(tweet.tweetHeader());
+					modelTwitter.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 				}	
 			}
@@ -187,7 +223,7 @@ public class BDAGui extends JFrame {
 
 		btnAEISCTETwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				model.clear();
+				modelTwitter.clear();
 				listaTweets.clear();
 				for(Status st: statusAEIscte) {
 					String user = st.getUser().getName();
@@ -195,14 +231,14 @@ public class BDAGui extends JFrame {
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-					model.addElement(tweet.tweetHeader());
+					modelTwitter.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 				}	
 			}
 		});
 		btnBiblioISCTETwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				model.clear();
+				modelTwitter.clear();
 				listaTweets.clear();
 				for(Status st: statusBiblioIscte) {
 					String user = st.getUser().getName();
@@ -210,7 +246,7 @@ public class BDAGui extends JFrame {
 					long id = st.getId();
 					Date createdAt = st.getCreatedAt();
 					Tweet tweet = new Tweet(user, text, id, createdAt);
-					model.addElement(tweet.tweetHeader());
+					modelTwitter.addElement(tweet.tweetHeader());
 					listaTweets.add(tweet);
 				}
 			}
@@ -218,7 +254,7 @@ public class BDAGui extends JFrame {
 		
 		btnSearchTwitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				model.clear();
+				modelTwitter.clear();
 				listaTweets.clear();
 				String searchTwitter = textSearchFieldTwitter.getText();
 				Query query = new Query(searchTwitter);
@@ -231,7 +267,7 @@ public class BDAGui extends JFrame {
 						long id = st.getId();
 						Date createdAt = st.getCreatedAt();
 						Tweet tweet = new Tweet(user, text, id, createdAt);
-						model.addElement(tweet.tweetHeader());
+						modelTwitter.addElement(tweet.tweetHeader());
 						listaTweets.add(tweet);
 					}
 
@@ -359,17 +395,59 @@ public class BDAGui extends JFrame {
 		panelHome.setLayout(gl_panelHome);
 		
 		JPanel panelFacebook = new JPanel();
-		panelFacebook.setBackground(new Color(30, 144, 255));
+		panelFacebook.setBackground(new Color(51, 102, 204));
 		tabbedPane.addTab("Facebook", null, panelFacebook, null);
+		
+		btnMyFeedFacebook = new JButton("My Feed");
+		
+		JScrollPane scrollPaneFacebookPostsList = new JScrollPane();
+		
+		JScrollPane scrollPanePost = new JScrollPane();
+		
+		JLabel lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/FacebookLogo_128x128.png")));
 		GroupLayout gl_panelFacebook = new GroupLayout(panelFacebook);
 		gl_panelFacebook.setHorizontalGroup(
 			gl_panelFacebook.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 733, Short.MAX_VALUE)
+				.addGroup(gl_panelFacebook.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelFacebook.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panelFacebook.createSequentialGroup()
+							.addComponent(btnMyFeedFacebook, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+							.addGap(18))
+						.addGroup(gl_panelFacebook.createSequentialGroup()
+							.addComponent(lblNewLabel_5)
+							.addPreferredGap(ComponentPlacement.UNRELATED)))
+					.addGroup(gl_panelFacebook.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPanePost, GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+						.addComponent(scrollPaneFacebookPostsList, GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE))
+					.addGap(290))
 		);
 		gl_panelFacebook.setVerticalGroup(
 			gl_panelFacebook.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 398, Short.MAX_VALUE)
+				.addGroup(gl_panelFacebook.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelFacebook.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnMyFeedFacebook)
+						.addComponent(scrollPaneFacebookPostsList, GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panelFacebook.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(scrollPanePost)
+						.addComponent(lblNewLabel_5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(38))
 		);
+		
+		textAreaPost = new JTextArea();
+		textAreaPost.setEditable(false);
+		textAreaPost.setFont(new Font("Verdana", Font.PLAIN, 13));
+		textAreaPost.setWrapStyleWord(true);
+		textAreaPost.setLineWrap(true);
+		scrollPanePost.setViewportView(textAreaPost);
+		
+		listFacebook = new JList();
+		listFacebook.setFont(new Font("Verdana", Font.PLAIN, 13));
+		listFacebook.setBorder(new CompoundBorder());
+		scrollPaneFacebookPostsList.setViewportView(listFacebook);
 		panelFacebook.setLayout(gl_panelFacebook);
 		
 		JPanel panelTwitter = new JPanel();
@@ -458,7 +536,7 @@ public class BDAGui extends JFrame {
 					.addContainerGap())
 		);
 		
-		listTwitter = new JList<>(model);
+		listTwitter = new JList<>(modelTwitter);
 		scrollPaneTweetsList.setViewportView(listTwitter);
 		listTwitter.setBorder(new CompoundBorder());
 		listTwitter.setFont(new Font("Verdana", Font.PLAIN, 13));
