@@ -59,6 +59,20 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.JSplitPane;
 import java.awt.GridLayout;
 
+/**
+ * @author Frederico
+ * @author Sara
+ * @author Rita
+ * @author Filipe
+ * @since Octuber,2018
+ * @version 2.0
+ * 
+ *  The BDAGui class access to academic information made available through various channels,
+ *  such as Email, Facebook and Twitter
+ *      
+ *
+ */
+
 public class BDAGui extends JFrame {
 	
 	private JPanel contentPane;
@@ -106,9 +120,10 @@ public class BDAGui extends JFrame {
 	}
 
 	/**
-	 * Constructor.
+	 * BDAGui constructor, 
 	 * Create the frame.
-	 */
+	 * 
+	*/
 	public BDAGui() {
 		setResizable(false);
 		initComponents();
@@ -124,7 +139,8 @@ public class BDAGui extends JFrame {
 	}
 	
 	/**
-	 * This method contains all of the code for creating events for the Email app
+	 * createEventsMail, 
+	 * This method contains all of the code for creating events for the Outlook app.
 	 */
 	
 	private void createEventsMail() {
@@ -132,8 +148,10 @@ public class BDAGui extends JFrame {
 	}
 	
 	/**
-	 * This method contains all of the code for creating events for the Facebook app
+	 * createEventsFacebook
+	 * This method contains all of the code for creating events for the Facebook app.
 	 */
+	
 	private void createEventsFacebook() {
 		
 		//*******VER createEventsTwitter()*******//
@@ -168,10 +186,13 @@ public class BDAGui extends JFrame {
 	}
 
 	/**
+	 * createEventsTwitter,
 	 * This method contains all of the code for creating events for the Twitter app
 	 * @throws TwitterException 
+	 * @see TwitterException
 	 *
 	 */
+	
 	private void createEventsTwitter() throws TwitterException {
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		
@@ -312,10 +333,12 @@ public class BDAGui extends JFrame {
 	}
 
 	/**
+	 * initComponents,
 	 * This method contains all of the code for creating events
-	 * and initializing components of the GUI
+	 * and initializing components of the GUI.
 	 *
-	 */
+	 */ 
+	
 	private void initComponents() {
 		setTitle("Bom Dia Academia");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(BDAGui.class.getResource("/engenhariaSoftware/resources/IGE.jpg")));
