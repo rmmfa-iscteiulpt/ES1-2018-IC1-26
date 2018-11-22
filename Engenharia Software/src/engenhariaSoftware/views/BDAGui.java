@@ -167,7 +167,7 @@ public class BDAGui extends JFrame {
 	 */
 	
 	private void createEventsFacebook() {
-		String accessToken = "EAANNMhF9bF0BAAcQzUzPaZBuzXfcyCY3q2ZA9jtSKZA2BZAAHcuw2jifTw7voTU153Rdd5acMkMsSNPZATLrRLSz9FIuO3vOsn1x2EuZAZAJIQ1bTkw9ZBj1j69SM2JmBDsbnGf5ucjklLZB8KUtftegZBWTvcZC8wNz4GL4Q9nxoODJIZA1ZBsHig9LESVC4GArt3RUZD";
+		String accessToken = "EAANNMhF9bF0BANiVbBXoqb1ka9aE7Ff7f5pzKu5X2rO5qhKTMZBbgC0kMXbrXzuK9JGbQNzKPZBBMg0ZCeZBvEMYrRkPkqyyPseXZCOLwpmNln4KZBJob82NwxZCqgxVH5Nw2vWZAu4xaWn1Hw6XNOkZALn7XIDXdol7QGP8PzUHRG54xFholnCwPn6OtE6sZC4MoZD";
 
 		FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_10);
 		
@@ -181,7 +181,7 @@ public class BDAGui extends JFrame {
 				for(List<Post> page: result) {
 					
 					for(Post aPost : page) {
-						String user = aPost.getName();
+						String user = me.getName();
 						String text = aPost.getMessage();
 						String id = aPost.getId();
 						Date createdAt = aPost.getCreatedTime();
