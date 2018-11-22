@@ -4,7 +4,6 @@ import java.util.Date;
 
 /**
  * @author Frederico
- * @author Sara
  * @since November,2018
  * 
  *  The Tweet class access to academic information made available in Twitter.
