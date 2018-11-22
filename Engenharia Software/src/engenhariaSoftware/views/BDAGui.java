@@ -167,7 +167,7 @@ public class BDAGui extends JFrame {
 	 */
 	
 	private void createEventsFacebook() {
-		String accessToken = "EAANNMhF9bF0BANiVbBXoqb1ka9aE7Ff7f5pzKu5X2rO5qhKTMZBbgC0kMXbrXzuK9JGbQNzKPZBBMg0ZCeZBvEMYrRkPkqyyPseXZCOLwpmNln4KZBJob82NwxZCqgxVH5Nw2vWZAu4xaWn1Hw6XNOkZALn7XIDXdol7QGP8PzUHRG54xFholnCwPn6OtE6sZC4MoZD";
+		String accessToken = "EAANNMhF9bF0BAGNTpUzZCXlyZCZBaRQZCaFEZADMqNHiXiSO6q8soNO6I26coIVinxTefRKLZCwclpjT3Hfv5tvffpemHjGSVBqakzifaihYoKZCBp2nXK4Fi9lL17ZBuX6owxlkRvbqjpSdxMbAGDvyaKYVd2meUdmbUBB2Sw3xIgZDZD";
 
 		FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_10);
 		
