@@ -2,6 +2,16 @@ package engenhariaSoftware.common;
 
 import java.util.Date;
 
+/**
+ * @author Frederico
+ * @author Sara
+ * @since November,2018
+ * 
+ *  The Tweet class access to academic information made available in Twitter.
+ *      
+ *
+ */
+
 public class Tweet {
 
 	private String user;
@@ -10,13 +20,13 @@ public class Tweet {
 	private Date createdAt;
 	
 	/**
-	 * Tweet constructor
-	 * @param user
-	 * @param text
-	 * @param id
-	 * @param createdAt
+	 * Tweet constructor ,
+	 * initialization user, text, id, createAt.
+	 * @param user this is the username 
+	 * @param text this is what the username wrote
+	 * @param id this is the username id
+	 * @param createdAt this is the date of the text
 	 */
-	
 	
 	public Tweet(String user, String text, long id, Date createdAt) {
 		this.user = user;
@@ -26,8 +36,9 @@ public class Tweet {
 	}
 	
 	/**
-	 * Getter for user name
-	 * @return
+	 * getUserName,
+	 * Getter for user name.
+	 * @return the user
 	 */
 
 	public String getUserName() {
@@ -35,8 +46,9 @@ public class Tweet {
 	}
 	
 	/**
-	 * Getter for the tweet text
-	 * @return
+	 * getText,
+	 * Getter for the tweet text.
+	 * @return the text
 	 */
 	
 	public String getText() {
@@ -44,8 +56,9 @@ public class Tweet {
 	}
 	
 	/**
-	 * Getter for the tweet id
-	 * @return
+	 * getId,
+	 * Getter for the tweet id.
+	 * @return id
 	 */
 	
 	public long getId() {
@@ -53,8 +66,9 @@ public class Tweet {
 	}
 	
 	/**
-	 * Getter for the tweet header (user name + date of creation)
-	 * @return
+	 * tweetHeader,
+	 * Getter for the tweet header.
+	 * @return user and date of creation
 	 */
 	
 	public String tweetHeader () {
@@ -62,8 +76,9 @@ public class Tweet {
 	}
 	
 	/**
-	 * Getter for the date of creation
-	 * @return
+	 * getCreatedAt,
+	 * Getter for the date of creation.
+	 * @return date of creation
 	 */
 	
 	public Date getCreatedAt() {
