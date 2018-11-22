@@ -8,6 +8,14 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import com.restfb.Connection;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Version;
+import com.restfb.types.Post;
+import com.restfb.types.User;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -31,6 +39,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
+import engenhariaSoftware.common.PostFacebook;
 import engenhariaSoftware.common.Tweet;
 
 import java.awt.Component;
@@ -100,6 +109,7 @@ public class BDAGui extends JFrame {
 	private JButton btnMyFeedFacebook;
 	private JTextArea textAreaPost;
 	private JList listFacebook;
+	private ArrayList<PostFacebook> listaPosts = new ArrayList<>();
 
 	/**
 	 * Main to launch the application.
@@ -157,33 +167,63 @@ public class BDAGui extends JFrame {
 	 */
 	
 	private void createEventsFacebook() {
+		String accessToken = "EAANNMhF9bF0BAAcQzUzPaZBuzXfcyCY3q2ZA9jtSKZA2BZAAHcuw2jifTw7voTU153Rdd5acMkMsSNPZATLrRLSz9FIuO3vOsn1x2EuZAZAJIQ1bTkw9ZBj1j69SM2JmBDsbnGf5ucjklLZB8KUtftegZBWTvcZC8wNz4GL4Q9nxoODJIZA1ZBsHig9LESVC4GArt3RUZD";
+
+		FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_10);
 		
-		//*******VER createEventsTwitter()*******//
+		User me = facebookClient.fetchObject("me", User.class);
+
+		Connection<Post> result = facebookClient.fetchConnection("me/feed", Post.class);
 		
-		//INSERIR API DO FACEBOOK AQUI
-		//
-		//
-		//
-		//
-		//
-		
-		//ACABAR A IMPLEMENTAÇÃO DO HANDLER DO BOTÃO PARA MOSTRAR OS POST DO FACEBOOK NA LISTA (VER TWIITER COMO FOI FEITO NO TWITTER)
 		btnMyFeedFacebook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				modelFacebook.clear();
+				for(List<Post> page: result) {
+					
+					for(Post aPost : page) {
+						String user = aPost.getName();
+						String text = aPost.getMessage();
+						String id = aPost.getId();
+						Date createdAt = aPost.getCreatedTime();
+						PostFacebook postfacebook = new PostFacebook(user, text, id, createdAt);
+						modelTwitter.addElement(postfacebook.postHeader());
+						listaPosts.add(postfacebook);
+						modelFacebook.addElement(""+aPost.getCreatedTime());
+//						System.out.println(aPost.getMessage());
+//						System.out.println("fb.com/" + aPost.getId());
+						
+				}
+				
+				}
 			
 			}
 		});
 		
-		//ACABAR A IMPLEMENTAÇÃO DO HANDLER DA LISTA PARA SELECIONAR OS POSTS E APARECER NA TEXTAREA EM BAIXO
 		listFacebook.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				textAreaPost.setText("");
 				String selectedValue = (String) listFacebook.getSelectedValue();
 				System.out.println();
-				
+				for(PostFacebook p: listaPosts) {
+					if(selectedValue != null && selectedValue.equals(p.postHeader())) {
+						textAreaTweet.append(p.getUserName() + " | " + p.getCreatedAt());
+						textAreaTweet.append("\n\n");
+						textAreaTweet.append(p.getText());
+					}
 				}
+//				for(List<Post> page: result) {
+//					for(Post aPost : page) {
+//						if(selectedValue != null && selectedValue.equals(""+aPost.getCreatedTime())) {
+//							textAreaPost.append(aPost.getName() + " | " + aPost.getCreatedTime());
+//							textAreaPost.append("\n\n");
+//							textAreaPost.append(aPost.getMessage());
+//						}
+//
+//					}
+//				}
+
+			}
 		});
 
 		
@@ -216,7 +256,6 @@ public class BDAGui extends JFrame {
 				modelTwitter.clear();
 				listaTweets.clear();
 				for(Status st: statusHome) {
-					System.out.println("Data: " + st.getCreatedAt());
 					String user = st.getUser().getName();
 					String text = st.getText();
 					long id = st.getId();
@@ -471,7 +510,7 @@ public class BDAGui extends JFrame {
 		textAreaPost.setLineWrap(true);
 		scrollPanePost.setViewportView(textAreaPost);
 		
-		listFacebook = new JList();
+		listFacebook = new JList<>(modelFacebook);
 		listFacebook.setFont(new Font("Verdana", Font.PLAIN, 13));
 		listFacebook.setBorder(new CompoundBorder());
 		scrollPaneFacebookPostsList.setViewportView(listFacebook);
