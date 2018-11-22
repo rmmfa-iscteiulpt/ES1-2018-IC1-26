@@ -186,9 +186,9 @@ public class BDAGui extends JFrame {
 						String id = aPost.getId();
 						Date createdAt = aPost.getCreatedTime();
 						PostFacebook postfacebook = new PostFacebook(user, text, id, createdAt);
-						modelTwitter.addElement(postfacebook.postHeader());
+						modelFacebook.addElement(postfacebook.postHeader());
 						listaPosts.add(postfacebook);
-						modelFacebook.addElement(""+aPost.getCreatedTime());
+//						modelFacebook.addElement(""+aPost.getCreatedTime());
 //						System.out.println(aPost.getMessage());
 //						System.out.println("fb.com/" + aPost.getId());
 						
@@ -207,9 +207,9 @@ public class BDAGui extends JFrame {
 				System.out.println();
 				for(PostFacebook p: listaPosts) {
 					if(selectedValue != null && selectedValue.equals(p.postHeader())) {
-						textAreaTweet.append(p.getUserName() + " | " + p.getCreatedAt());
-						textAreaTweet.append("\n\n");
-						textAreaTweet.append(p.getText());
+						textAreaPost.append(p.getUserName() + " | " + p.getCreatedAt());
+						textAreaPost.append("\n\n");
+						textAreaPost.append(p.getText());
 					}
 				}
 //				for(List<Post> page: result) {
