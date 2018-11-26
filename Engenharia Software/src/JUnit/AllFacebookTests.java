@@ -8,4 +8,5 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({PostFacebookJUnit.class})
 public class AllFacebookTests {
 
+	
 }
