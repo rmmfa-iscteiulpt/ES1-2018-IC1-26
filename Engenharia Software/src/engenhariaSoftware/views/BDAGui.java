@@ -73,7 +73,7 @@ import java.awt.GridLayout;
  * @author Sara
  * @author Rita
  * @author Filipe
- * @since Octuber,2018
+ * @since October,2018
  * @version 2.0
  * 
  *  The BDAGui class access to academic information made available through various channels,
@@ -86,9 +86,9 @@ public class BDAGui extends JFrame {
 	
 	private JPanel contentPane;
 	
-	/*
-	 * Twitter
-	 */
+	
+	//Twitter
+	 
 	private JButton btnMyFeedTwitter;
 	private JButton btnISCTEIULTwitter;
 	private JTextField textSearchFieldTwitter;
@@ -102,15 +102,23 @@ public class BDAGui extends JFrame {
 	private JButton btnBiblioISCTETwitter;
 	private JScrollPane scrollPaneTweet;
 	
-	/*
-	 * Facebook
-	 */
+	//Facebook
+	
 	private DefaultListModel<String> modelFacebook = new DefaultListModel<>();
 	private JButton btnMyFeedFacebook;
 	private JTextArea textAreaPost;
 	private JList listFacebook;
 	private ArrayList<PostFacebook> listaPosts = new ArrayList<>();
 
+	//Email
+	
+	private DefaultListModel<String> modelEmail = new DefaultListModel<>();
+	private JTextArea textAreaEmail;
+	private JList listEmails;
+	private JButton btnMyFeedEmail;
+//	private ArrayList<Email> listaEmail = new ArrayList<>();
+
+	
 	/**
 	 * Main to launch the application.
 	 * @param args gives the argument to use
@@ -158,6 +166,21 @@ public class BDAGui extends JFrame {
 	 */
 	
 	private void createEventsMail() {
+		btnMyFeedEmail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modelEmail.clear();
+				
+				}
+			
+		});
+		
+		listEmails.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				textAreaEmail.setText("");
+
+			}
+		});
 		
 	}
 	
@@ -415,7 +438,7 @@ public class BDAGui extends JFrame {
 		txtHomeAnounces.setBackground(Color.WHITE);
 		txtHomeAnounces.setLineWrap(true);
 		txtHomeAnounces.setWrapStyleWord(true);
-		txtHomeAnounces.setText("\r\nBom dia Academia \u00E9 uma aplica\u00E7\u00E3o agregadora de conte\u00FAdo acad\u00E9mico das aplica\u00E7\u00F5es Facebook, Twitter e Outlook desenvolvida com recurso \u00E0s API's de cada aplica\u00E7\u00E3o de forma a ir buscar dados as essas plataformas.\r\n\r\nFuncionalidades v1: Twitter\r\n\r\n\u00DAltima atualiza\u00E7\u00E3o: 20/10/2018");
+		txtHomeAnounces.setText("\r\nBom dia Academia \u00E9 uma aplica\u00E7\u00E3o agregadora de conte\u00FAdo acad\u00E9mico das aplica\u00E7\u00F5es Facebook, Twitter e Outlook desenvolvida com recurso \u00E0s API's de cada aplica\u00E7\u00E3o de forma a ir buscar dados as essas plataformas.\r\n\r\nFuncionalidades v2: Twitter, Facebook\r\n\r\n\u00DAltima atualiza\u00E7\u00E3o: 25/11/2018");
 		txtHomeAnounces.setEditable(false);
 		
 		JLabel lblOutlookHome = new JLabel("");
@@ -616,17 +639,55 @@ public class BDAGui extends JFrame {
 		panelTwitter.setLayout(gl_panelTwitter);
 		
 		JPanel panelEmail = new JPanel();
+		panelEmail.setBackground(new Color(70, 130, 180));
 		tabbedPane.addTab("Outlook", null, panelEmail, null);
+		
+		JScrollPane scrollPaneEmails = new JScrollPane();
+		
+		JScrollPane scrollPaneEmail = new JScrollPane();
+		
+		btnMyFeedEmail = new JButton("My Feed");
+		
+		JLabel lblNewLabel_6 = new JLabel("");
+		lblNewLabel_6.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/outlook_128x128.png")));
 		GroupLayout gl_panelEmail = new GroupLayout(panelEmail);
 		gl_panelEmail.setHorizontalGroup(
 			gl_panelEmail.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 733, Short.MAX_VALUE)
+				.addGroup(gl_panelEmail.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnMyFeedEmail, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_6))
+					.addGap(18)
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(scrollPaneEmail, Alignment.LEADING)
+						.addComponent(scrollPaneEmails, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
+					.addContainerGap(289, Short.MAX_VALUE))
 		);
 		gl_panelEmail.setVerticalGroup(
 			gl_panelEmail.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 398, Short.MAX_VALUE)
+				.addGroup(gl_panelEmail.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.BASELINE)
+						.addComponent(scrollPaneEmails, GroupLayout.PREFERRED_SIZE, 379, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnMyFeedEmail))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPaneEmail, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_6))
+					.addContainerGap(42, Short.MAX_VALUE))
 		);
+		
+		textAreaEmail = new JTextArea();
+		scrollPaneEmail.setViewportView(textAreaEmail);
+		
+		listEmails = new JList<>(modelEmail);
+		listEmails.setFont(new Font("Verdana", Font.PLAIN, 13));
+		scrollPaneEmails.setViewportView(listEmails);
 		panelEmail.setLayout(gl_panelEmail);
+		
+		JPanel panelFeedColetivo = new JPanel();
+		tabbedPane.addTab("Feed Coletivo", null, panelFeedColetivo, null);
 		
 		JPanel panelHelp = new JPanel();
 		panelHelp.setBackground(Color.WHITE);
@@ -660,7 +721,7 @@ public class BDAGui extends JFrame {
 		JTextArea txtrAquiPodeAprender = new JTextArea();
 		txtrAquiPodeAprender.setWrapStyleWord(true);
 		txtrAquiPodeAprender.setLineWrap(true);
-		txtrAquiPodeAprender.setText("Aqui pode aprender como utilizar a aplica\u00E7\u00E3o BDA e saber sobre todas as suas funcionalidades.\r\n\r\nHome:\r\n   - Introdu\u00E7\u00E3o \u00E0 aplica\u00E7\u00E3o;\r\n   - Vers\u00E3o e funcionalidades dispon\u00EDveis;\r\n   - Data da \u00FAltima atualiza\u00E7\u00E3o.\r\n\r\nFacebook:\r\n   - AINDA N\u00C3O EST\u00C1 DISPON\u00CDVEL.\r\n\r\nTwitter:\r\n   - \"My Feed\": Mostra os tweets mais recentes do seu feed de not\u00EDcias;\r\n   - \"ISCTE-IUL\": Mostra os tweets mais recentes da conta do ISCTE-IUL;\r\n   - \"AEISCTE\": Mostra os tweets mais recentes da conta da Associa\u00E7\u00E3o de Estudante do ISCTE-IUL;\r\n   - \"Biblioteca ISCTE\": Mostra os tweets mais recentes da conta da Biblioteca do ISCTE-IUL.\r\n   - \"Search\": Permite pesquisar por tweets que contenham a palavra introduzia pelo utilizador na barra de pesquisa;\r\n   - \"Retweet\": Permite retweetar. Para isto ser poss\u00EDvel \u00E9 necess\u00E1rio que tenha um tweet selecionado primeiro.\r\n\r\nOutlook:\r\n   - AINDA N\u00C3O EST\u00C1 DISPON\u00CDVEL.\r\n\r\nAbout Us:\r\n   - Informa\u00E7\u00F5es sobre os desenvolvedores desta aplica\u00E7\u00E3o.");
+		txtrAquiPodeAprender.setText("Aqui pode aprender como utilizar a aplica\u00E7\u00E3o BDA e saber sobre todas as suas funcionalidades.\r\n\r\nHome:\r\n   - Introdu\u00E7\u00E3o \u00E0 aplica\u00E7\u00E3o;\r\n   - Vers\u00E3o e funcionalidades dispon\u00EDveis;\r\n   - Data da \u00FAltima atualiza\u00E7\u00E3o.\r\n\r\nFacebook:\r\n   - \"My Feed\": Mostra os posts da p\u00E1gina do facebook.\r\n\r\nTwitter:\r\n   - \"My Feed\": Mostra os tweets mais recentes do seu feed de not\u00EDcias;\r\n   - \"ISCTE-IUL\": Mostra os tweets mais recentes da conta do ISCTE-IUL;\r\n   - \"AEISCTE\": Mostra os tweets mais recentes da conta da Associa\u00E7\u00E3o de Estudante do ISCTE-IUL;\r\n   - \"Biblioteca ISCTE\": Mostra os tweets mais recentes da conta da Biblioteca do ISCTE-IUL.\r\n   - \"Search\": Permite pesquisar por tweets que contenham a palavra introduzia pelo utilizador na barra de pesquisa;\r\n   - \"Retweet\": Permite retweetar. Para isto ser poss\u00EDvel \u00E9 necess\u00E1rio que tenha um tweet selecionado primeiro.\r\n\r\nOutlook:\r\n   - AINDA N\u00C3O EST\u00C1 DISPON\u00CDVEL.\r\n\r\nAbout Us:\r\n   - Informa\u00E7\u00F5es sobre os desenvolvedores desta aplica\u00E7\u00E3o.");
 		txtrAquiPodeAprender.setFont(new Font("Verdana", Font.PLAIN, 13));
 		scrollPane.setViewportView(txtrAquiPodeAprender);
 		panelHelp.setLayout(gl_panelHelp);
