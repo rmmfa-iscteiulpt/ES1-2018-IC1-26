@@ -158,7 +158,7 @@ public class BDAGui extends JFrame {
 	 */
 	
 	private void createEventsMail() {
-		
+		String accessToken = "_";
 	}
 	
 	/**
