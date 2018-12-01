@@ -15,13 +15,18 @@ import com.restfb.FacebookClient;
 import com.restfb.Version;
 import com.restfb.types.Post;
 import com.restfb.types.User;
+import com.restfb.types.Payment.Item;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -41,6 +46,7 @@ import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 import engenhariaSoftware.common.PostFacebook;
 import engenhariaSoftware.common.Tweet;
+import engenhariaSoftware.common.TweetPostEmail;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -67,6 +73,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.JSplitPane;
 import java.awt.GridLayout;
+import javax.swing.JCheckBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /**
  * @author Frederico
@@ -117,7 +126,24 @@ public class BDAGui extends JFrame {
 	private JList listEmails;
 	private JButton btnMyFeedEmail;
 //	private ArrayList<Email> listaEmail = new ArrayList<>();
-
+	
+	//Feed Coletivo
+	private DefaultListModel<String> modelFeedColetivo = new DefaultListModel<>();
+	private JTextArea textAreaFeedColetivo;
+	private JList listFeedColetivo;
+	private JButton btnFeedDeNoticias;
+	private ArrayList<TweetPostEmail> listaPostsFeedColetivo = new ArrayList<>();
+	private JCheckBox chckbxFacebook;
+	private JCheckBox chckbxTwitter;
+	private JComboBox comboBoxDay;
+	private JComboBox comboBoxMonth;
+	private JComboBox comboBoxYear;
+	private String day;
+	private String month;
+	private String year;
+	private JTextField textFieldDay;
+	private JTextField textFieldMonth;
+	private JTextField textFieldYear;
 	
 	/**
 	 * Main to launch the application.
@@ -152,11 +178,343 @@ public class BDAGui extends JFrame {
 		try {
 			createEventsTwitter();
 		} catch (TwitterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		createEventsFacebook();
 		createEventsMail();
+		try {
+			createEventsFeedColetivo();
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/*
+	 * This method contains all of the code for creating events for the "Feed Coletivo" app.
+	 */
+	private void createEventsFeedColetivo() throws TwitterException {
+		
+		//Facebook
+		
+		String accessToken = "EAANNMhF9bF0BAGNTpUzZCXlyZCZBaRQZCaFEZADMqNHiXiSO6q8soNO6I26coIVinxTefRKLZCwclpjT3Hfv5tvffpemHjGSVBqakzifaihYoKZCBp2nXK4Fi9lL17ZBuX6owxlkRvbqjpSdxMbAGDvyaKYVd2meUdmbUBB2Sw3xIgZDZD";
+		FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_10);
+		User me = facebookClient.fetchObject("me", User.class);
+		Connection<Post> result = facebookClient.fetchConnection("me/feed", Post.class);
+		
+		//Twitter
+		
+		ConfigurationBuilder cb = new ConfigurationBuilder();
+		cb.setDebugEnabled(true).setOAuthConsumerKey("x2pTILrYxrf7tE1r0dvuv9jWG").setOAuthConsumerSecret("I2elQ8AGRjfRme2f8PWG4OHwm0bCzOrYxvkzcmB00jJ8iXrvam").setOAuthAccessToken("1051429457913896962-KsecOb4dSYC2tY9YSfZKVnUgZilxyl").setOAuthAccessTokenSecret("4o63MCLz1VIMU6asHCa72cVppUdMcwsB40Y58u1pIk02p");
+		
+		TwitterFactory tf = new TwitterFactory(cb.build());
+		twitter4j.Twitter twitter = tf.getInstance();
+		
+		List<Status> statusHome = twitter.getHomeTimeline();
+		List<Status> statusIscte = twitter.getUserTimeline("iscteiul");
+		List<Status> statusAEIscte = twitter.getUserTimeline("aeiscte");
+		List<Status> statusBiblioIscte = twitter.getUserTimeline("bibliotecaiscte");
+		
+		btnFeedDeNoticias.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modelFeedColetivo.clear();
+				listaPosts.clear();
+				listaTweets.clear();
+				listaPostsFeedColetivo.clear();
+				
+				for(List<Post> page: result) {
+					for(Post aPost : page) {
+						String type = "Facebook";
+						String user = me.getName();
+						String text = aPost.getMessage();
+						String id = aPost.getId();
+						Date createdAt = aPost.getCreatedTime();
+						TweetPostEmail obj1 = new TweetPostEmail(type, user, text, id, createdAt);
+						modelFeedColetivo.addElement(obj1.postHeader());
+						listaPostsFeedColetivo.add(obj1);
+
+					}
+				}
+				for(Status st: statusHome) {
+					String type = "Twitter";
+					String user = st.getUser().getName();
+					String text = st.getText();
+					String id = Long.toString(st.getId());
+					Date createdAt = st.getCreatedAt();
+					TweetPostEmail obj1 = new TweetPostEmail(type, user, text, id, createdAt);
+					modelFeedColetivo.addElement(obj1.postHeader());
+					listaPostsFeedColetivo.add(obj1);
+					
+				}	
+				for(Status st: statusIscte) {
+					String type = "Twitter";
+					String user = st.getUser().getName();
+					String text = st.getText();
+					String id = Long.toString(st.getId());
+					Date createdAt = st.getCreatedAt();
+					TweetPostEmail obj1 = new TweetPostEmail(type, user, text, id, createdAt);
+					modelFeedColetivo.addElement(obj1.postHeader());
+					listaPostsFeedColetivo.add(obj1);
+					
+				}	
+				for(Status st: statusAEIscte) {
+					String type = "Twitter";
+					String user = st.getUser().getName();
+					String text = st.getText();
+					String id = Long.toString(st.getId());
+					Date createdAt = st.getCreatedAt();
+					TweetPostEmail obj1 = new TweetPostEmail(type, user, text, id, createdAt);
+					modelFeedColetivo.addElement(obj1.postHeader());
+					listaPostsFeedColetivo.add(obj1);
+				}	
+				for(Status st: statusBiblioIscte) {
+					String type = "Twitter";
+					String user = st.getUser().getName();
+					String text = st.getText();
+					String id = Long.toString(st.getId());
+					Date createdAt = st.getCreatedAt();
+					TweetPostEmail obj1 = new TweetPostEmail(type, user, text, id, createdAt);
+					modelFeedColetivo.addElement(obj1.postHeader());
+					listaPostsFeedColetivo.add(obj1);
+				}
+				
+				
+			}
+
+		});
+		
+		chckbxFacebook.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if(chckbxFacebook.isSelected() && !chckbxTwitter.isSelected()) {
+					modelFeedColetivo.clear();
+					for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+						if(tpe.getType().equals("Facebook")) {
+							modelFeedColetivo.addElement(tpe.postHeader());
+						}
+					}
+				}
+				if(chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+					modelFeedColetivo.clear();
+					for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+						modelFeedColetivo.addElement(tpe.postHeader());
+					}
+				}
+				if(arg0.getStateChange() == ItemEvent.DESELECTED && chckbxTwitter.isSelected()) {
+					modelFeedColetivo.clear();
+					for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+						if(tpe.getType().equals("Twitter")) {
+							modelFeedColetivo.addElement(tpe.postHeader());
+						}
+					}
+				}
+				if(arg0.getStateChange() == ItemEvent.DESELECTED && !chckbxTwitter.isSelected()) {
+					modelFeedColetivo.clear();
+				}
+				
+			}
+		});
+
+		chckbxTwitter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				 Object source = e.getItemSelectable();
+				if(chckbxTwitter.isSelected() && !chckbxFacebook.isSelected()) {
+					modelFeedColetivo.clear();
+					for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+						if(tpe.getType().equals("Twitter")) {
+							modelFeedColetivo.addElement(tpe.postHeader());
+						}
+					}
+				} 
+				if(chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+					modelFeedColetivo.clear();
+					for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+						modelFeedColetivo.addElement(tpe.postHeader());
+					}
+				}
+				if(e.getStateChange() == ItemEvent.DESELECTED && chckbxFacebook.isSelected()) {
+					modelFeedColetivo.clear();
+					for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+						if(tpe.getType().equals("Facebook")) {
+							modelFeedColetivo.addElement(tpe.postHeader());
+						}
+					}
+				}
+				if(e.getStateChange() == ItemEvent.DESELECTED && !chckbxFacebook.isSelected()) {
+					modelFeedColetivo.clear();
+				}
+			}
+		});
+		
+		listFeedColetivo.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				textAreaFeedColetivo.setText("");
+				String selectedValue = (String) listFeedColetivo.getSelectedValue();
+				for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+					if(selectedValue != null && selectedValue.equals(tpe.postHeader())) {
+						textAreaFeedColetivo.append(tpe.getUserName() + " | " + tpe.getCreatedAt());
+						textAreaFeedColetivo.append("\n\n");
+						textAreaFeedColetivo.append(tpe.getText());
+					}
+				}
+			}
+		});
+		
+		comboBoxDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				day = (String) comboBoxDay.getSelectedItem();
+				if(day!=null && month!=null && year!=null) {
+					modelFeedColetivo.clear();
+					if(chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+							String s = formatter.format(tpe.getCreatedAt());
+							String[] parts = s.split("-");
+							System.out.println(s);
+							tpe.setNormalDate(s);
+							if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+								modelFeedColetivo.addElement(tpe.postHeader());
+								System.out.println(tpe.postHeader());
+							}
+						}
+					} else if(chckbxFacebook.isSelected() && !chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							if(tpe.getType().equals("Facebook")) {
+								Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+								String s = formatter.format(tpe.getCreatedAt());
+								String[] parts = s.split("-");
+								System.out.println(s);
+								tpe.setNormalDate(s);
+								if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+									modelFeedColetivo.addElement(tpe.postHeader());
+									System.out.println(tpe.postHeader());
+								}
+							}
+						}
+					} else if(!chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							if(tpe.getType().equals("Twitter")) {
+								Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+								String s = formatter.format(tpe.getCreatedAt());
+								String[] parts = s.split("-");
+								System.out.println(s);
+								tpe.setNormalDate(s);
+								if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+									modelFeedColetivo.addElement(tpe.postHeader());
+									System.out.println(tpe.postHeader());
+								}
+							}
+						}
+					} else if(!chckbxFacebook.isSelected() && !chckbxTwitter.isSelected()) {
+						modelFeedColetivo.clear();
+					}
+				}
+			}
+		});
+		
+		comboBoxMonth.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				month = (String) comboBoxMonth.getSelectedItem();
+				if(day!=null && month!=null && year!=null) {
+					modelFeedColetivo.clear();
+					if(chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+							String s = formatter.format(tpe.getCreatedAt());
+							String[] parts = s.split("-");
+							System.out.println(s);
+							tpe.setNormalDate(s);
+							if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+								modelFeedColetivo.addElement(tpe.postHeader());
+								System.out.println(tpe.postHeader());
+							}
+						}
+					} else if(chckbxFacebook.isSelected() && !chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							if(tpe.getType().equals("Facebook")) {
+								Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+								String s = formatter.format(tpe.getCreatedAt());
+								String[] parts = s.split("-");
+								System.out.println(s);
+								tpe.setNormalDate(s);
+								if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+									modelFeedColetivo.addElement(tpe.postHeader());
+									System.out.println(tpe.postHeader());
+								}
+							}
+						}
+					} else if(!chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							if(tpe.getType().equals("Twitter")) {
+								Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+								String s = formatter.format(tpe.getCreatedAt());
+								String[] parts = s.split("-");
+								System.out.println(s);
+								tpe.setNormalDate(s);
+								if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+									modelFeedColetivo.addElement(tpe.postHeader());
+									System.out.println(tpe.postHeader());
+								}
+							}
+						}
+					} else if(!chckbxFacebook.isSelected() && !chckbxTwitter.isSelected()) {
+						modelFeedColetivo.clear();
+					}
+				}
+			}
+		});
+		
+		comboBoxYear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				year = (String) comboBoxYear.getSelectedItem();
+				if(day!=null && month!=null && year!=null) {
+					modelFeedColetivo.clear();
+					if(chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+							String s = formatter.format(tpe.getCreatedAt());
+							String[] parts = s.split("-");
+							System.out.println(s);
+							tpe.setNormalDate(s);
+							if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+								modelFeedColetivo.addElement(tpe.postHeader());
+								System.out.println(tpe.postHeader());
+							}
+						}
+					} else if(chckbxFacebook.isSelected() && !chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							if(tpe.getType().equals("Facebook")) {
+								Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+								String s = formatter.format(tpe.getCreatedAt());
+								String[] parts = s.split("-");
+								System.out.println(s);
+								tpe.setNormalDate(s);
+								if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+									modelFeedColetivo.addElement(tpe.postHeader());
+									System.out.println(tpe.postHeader());
+								}
+							}
+						}
+					} else if(!chckbxFacebook.isSelected() && chckbxTwitter.isSelected()) {
+						for(TweetPostEmail tpe: listaPostsFeedColetivo) {
+							if(tpe.getType().equals("Twitter")) {
+								Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+								String s = formatter.format(tpe.getCreatedAt());
+								String[] parts = s.split("-");
+								System.out.println(s);
+								tpe.setNormalDate(s);
+								if(day.equals(parts[0]) && month.equals(parts[1]) && year.equals(parts[2])) {
+									modelFeedColetivo.addElement(tpe.postHeader());
+									System.out.println(tpe.postHeader());
+								}
+							}
+						}
+					} else if(!chckbxFacebook.isSelected() && !chckbxTwitter.isSelected()) {
+						modelFeedColetivo.clear();
+					}
+				}
+			}
+		});
 		
 	}
 	
@@ -201,6 +559,7 @@ public class BDAGui extends JFrame {
 		btnMyFeedFacebook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				modelFacebook.clear();
+				listaPosts.clear();
 				for(List<Post> page: result) {
 					
 					for(Post aPost : page) {
@@ -211,9 +570,6 @@ public class BDAGui extends JFrame {
 						PostFacebook postfacebook = new PostFacebook(user, text, id, createdAt);
 						modelFacebook.addElement(postfacebook.postHeader());
 						listaPosts.add(postfacebook);
-//						modelFacebook.addElement(""+aPost.getCreatedTime());
-//						System.out.println(aPost.getMessage());
-//						System.out.println("fb.com/" + aPost.getId());
 						
 				}
 				
@@ -235,17 +591,6 @@ public class BDAGui extends JFrame {
 						textAreaPost.append(p.getText());
 					}
 				}
-//				for(List<Post> page: result) {
-//					for(Post aPost : page) {
-//						if(selectedValue != null && selectedValue.equals(""+aPost.getCreatedTime())) {
-//							textAreaPost.append(aPost.getName() + " | " + aPost.getCreatedTime());
-//							textAreaPost.append("\n\n");
-//							textAreaPost.append(aPost.getMessage());
-//						}
-//
-//					}
-//				}
-
 			}
 		});
 
@@ -656,13 +1001,16 @@ public class BDAGui extends JFrame {
 				.addGroup(gl_panelEmail.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnMyFeedEmail, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_6))
-					.addGap(18)
-					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(scrollPaneEmail, Alignment.LEADING)
-						.addComponent(scrollPaneEmails, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
-					.addContainerGap(289, Short.MAX_VALUE))
+						.addGroup(gl_panelEmail.createSequentialGroup()
+							.addComponent(btnMyFeedEmail, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+							.addGap(18))
+						.addGroup(gl_panelEmail.createSequentialGroup()
+							.addComponent(lblNewLabel_6)
+							.addPreferredGap(ComponentPlacement.UNRELATED)))
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(scrollPaneEmail)
+						.addComponent(scrollPaneEmails, GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE))
+					.addContainerGap(305, Short.MAX_VALUE))
 		);
 		gl_panelEmail.setVerticalGroup(
 			gl_panelEmail.createParallelGroup(Alignment.LEADING)
@@ -672,10 +1020,10 @@ public class BDAGui extends JFrame {
 						.addComponent(scrollPaneEmails, GroupLayout.PREFERRED_SIZE, 379, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnMyFeedEmail))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPaneEmail, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_6))
-					.addContainerGap(42, Short.MAX_VALUE))
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel_6)
+						.addComponent(scrollPaneEmail, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(55, Short.MAX_VALUE))
 		);
 		
 		textAreaEmail = new JTextArea();
@@ -687,7 +1035,163 @@ public class BDAGui extends JFrame {
 		panelEmail.setLayout(gl_panelEmail);
 		
 		JPanel panelFeedColetivo = new JPanel();
+		panelFeedColetivo.setBackground(Color.DARK_GRAY);
 		tabbedPane.addTab("Feed Coletivo", null, panelFeedColetivo, null);
+		
+		JScrollPane scrollPaneFeedColetivo = new JScrollPane();
+		
+		JScrollPane scrollPaneFeedColetivoPosts = new JScrollPane();
+		
+		btnFeedDeNoticias = new JButton("Feed de Noticias");
+		btnFeedDeNoticias.setFont(new Font("Verdana", Font.BOLD, 11));
+		
+		chckbxFacebook = new JCheckBox("Facebook");
+		chckbxFacebook.setFont(new Font("Verdana", Font.BOLD, 11));
+		chckbxTwitter = new JCheckBox("Twitter");
+		chckbxTwitter.setFont(new Font("Verdana", Font.BOLD, 11));
+		
+		String [] days = {"-", "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
+		comboBoxDay = new JComboBox(days);
+		comboBoxDay.setFont(new Font("Verdana", Font.BOLD, 11));
+		
+		
+		String[] months = {"-","01","02","03","04","05","06","07","08","09","10","11","12"};
+		comboBoxMonth = new JComboBox(months);
+		comboBoxMonth.setFont(new Font("Verdana", Font.BOLD, 11));
+		
+		
+		String[] years = {"-","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"};
+		comboBoxYear = new JComboBox(years);
+		comboBoxYear.setFont(new Font("Verdana", Font.BOLD, 11));
+		
+		textFieldDay = new JTextField();
+		textFieldDay.setForeground(Color.WHITE);
+		textFieldDay.setBackground(Color.DARK_GRAY);
+		textFieldDay.setFont(new Font("Verdana", Font.BOLD, 13));
+		textFieldDay.setText("Day:");
+		textFieldDay.setEditable(false);
+		textFieldDay.setColumns(10);
+		
+		textFieldMonth = new JTextField();
+		textFieldMonth.setBackground(Color.DARK_GRAY);
+		textFieldMonth.setForeground(Color.WHITE);
+		textFieldMonth.setFont(new Font("Verdana", Font.BOLD, 13));
+		textFieldMonth.setEditable(false);
+		textFieldMonth.setText("Month:");
+		textFieldMonth.setColumns(10);
+		
+		textFieldYear = new JTextField();
+		textFieldYear.setForeground(Color.WHITE);
+		textFieldYear.setBackground(Color.DARK_GRAY);
+		textFieldYear.setFont(new Font("Verdana", Font.BOLD, 13));
+		textFieldYear.setEditable(false);
+		textFieldYear.setText("Year:");
+		textFieldYear.setColumns(10);
+		
+		JLabel lblFCFacebookLogo = new JLabel("");
+		lblFCFacebookLogo.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/FacebookLogo_128x128.png")));
+		
+		JLabel lblFCTwitterLogo = new JLabel("");
+		lblFCTwitterLogo.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/TwitterLogo_128x128.png")));
+		
+		JLabel lblFCOutllokLogo = new JLabel("");
+		lblFCOutllokLogo.setIcon(new ImageIcon(BDAGui.class.getResource("/engenhariaSoftware/resources/outlook_128x128.png")));
+		
+		
+		GroupLayout gl_panelFeedColetivo = new GroupLayout(panelFeedColetivo);
+		gl_panelFeedColetivo.setHorizontalGroup(
+			gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnFeedDeNoticias)
+					.addGap(12)
+					.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(scrollPaneFeedColetivoPosts)
+						.addComponent(scrollPaneFeedColetivo, GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
+					.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+							.addGap(10)
+							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+									.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(chckbxTwitter, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(chckbxFacebook, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+											.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(textFieldDay, 0, 0, Short.MAX_VALUE)
+												.addComponent(comboBoxDay, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(comboBoxMonth, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(textFieldMonth, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(textFieldYear, 0, 0, Short.MAX_VALUE)
+										.addComponent(comboBoxYear, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+								.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblFCOutllokLogo)
+									.addGap(18)
+									.addComponent(lblFCFacebookLogo)
+									.addPreferredGap(ComponentPlacement.RELATED))))
+						.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+							.addGap(84)
+							.addComponent(lblFCTwitterLogo)))
+					.addContainerGap(28, Short.MAX_VALUE))
+		);
+		gl_panelFeedColetivo.setVerticalGroup(
+			gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panelFeedColetivo.createSequentialGroup()
+					.addContainerGap(11, Short.MAX_VALUE)
+					.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.BASELINE)
+						.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.BASELINE)
+								.addComponent(textFieldDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(textFieldMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(textFieldYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(8)
+							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboBoxMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboBoxYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+									.addGap(15)
+									.addComponent(chckbxFacebook)
+									.addGap(7)
+									.addComponent(chckbxTwitter)
+									.addPreferredGap(ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+									.addComponent(lblFCOutllokLogo)
+									.addGap(32))
+								.addGroup(Alignment.TRAILING, gl_panelFeedColetivo.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblFCFacebookLogo)
+									.addGap(38)))
+							.addGap(131))
+						.addComponent(btnFeedDeNoticias)
+						.addGroup(gl_panelFeedColetivo.createSequentialGroup()
+							.addComponent(scrollPaneFeedColetivo, GroupLayout.PREFERRED_SIZE, 389, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(scrollPaneFeedColetivoPosts, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addContainerGap(25, GroupLayout.PREFERRED_SIZE))
+				.addGroup(Alignment.TRAILING, gl_panelFeedColetivo.createSequentialGroup()
+					.addContainerGap(416, Short.MAX_VALUE)
+					.addComponent(lblFCTwitterLogo)
+					.addGap(39))
+		);
+		
+		textAreaFeedColetivo = new JTextArea();
+		textAreaFeedColetivo.setFont(new Font("Verdana", Font.PLAIN, 13));
+		textAreaFeedColetivo.setEditable(false);
+		textAreaFeedColetivo.setWrapStyleWord(true);
+		textAreaFeedColetivo.setLineWrap(true);
+		scrollPaneFeedColetivoPosts.setViewportView(textAreaFeedColetivo);
+		
+		listFeedColetivo = new JList<>(modelFeedColetivo);
+		listFeedColetivo.setFont(new Font("Verdana", Font.PLAIN, 13));
+		scrollPaneFeedColetivo.setViewportView(listFeedColetivo);
+		panelFeedColetivo.setLayout(gl_panelFeedColetivo);
 		
 		JPanel panelHelp = new JPanel();
 		panelHelp.setBackground(Color.WHITE);
