@@ -69,7 +69,7 @@ public class PostFacebook {
 	 */
 	
 	public String postHeader () {
-		return this.user + ": " + this.createdAt;
+		return " Facebook: " + this.user + ": " + this.createdAt;
 	}
 	
 	/**
