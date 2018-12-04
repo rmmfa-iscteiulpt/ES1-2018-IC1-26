@@ -318,7 +318,7 @@ public class BDAGui extends JFrame {
 				host = "outlook.office365.com";// change accordingly
 				mailStoreType = "pop3";
 				username = "fdtmg@iscte-iul.pt";// change accordingly
-				password = "FFpp1479638";// change accordingly
+				password = "******";// change accordingly
 
 				try {
 					//create properties field
@@ -980,7 +980,7 @@ public class BDAGui extends JFrame {
 				host = "outlook.office365.com";// change accordingly
 				mailStoreType = "pop3";
 				username = "fdtmg@iscte-iul.pt";// change accordingly
-				password = "FFpp1479638";// change accordingly
+				password = "*******";// change accordingly
 
 				try {
 					//create properties field
