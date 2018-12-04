@@ -1,35 +1,47 @@
 package engenhariaSoftware.common;
 
 import java.util.Date;
-/**
- * @author Sara
- * @since November,2018
- * 
- *  The Facebook class access to academic information made available in Facebook.
- *      
- *
- */
-public class PostFacebook {
+
+public class TweetPostEmail {
 	
+	private String type;
 	private String user;
 	private String text;
 	private String id;
+	private String normalDate;
 	private Date createdAt;
 	
 	/**
-	 * Facebook constructor ,
-	 * initialization user, text, id, createAt.
+	 * TweetPostEmail constructor ,
+	 * initialization type, user, text, id, createAt.
+	 * @param type this is the post type
 	 * @param user this is the username 
 	 * @param text this is what the username wrote
 	 * @param id this is the username id
 	 * @param createdAt this is the date of the text
 	 */
 	
-	public PostFacebook(String user, String text, String id, Date createdAt) {
+	public TweetPostEmail(String type, String user, String text, String id, Date createdAt) {
+		this.type = type;
 		this.user = user;
 		this.text = text;
 		this.id = id;
 		this.createdAt = createdAt;
+	}
+	
+	public String getNormalDate() {
+		return this.normalDate;
+	}
+	
+	public void setNormalDate(String date) {
+		this.normalDate = date;
+	}
+	
+	/*
+	 * Getter for the type
+	 */
+	public String getType() {
+		return this.type;
 	}
 	
 	/**
@@ -69,7 +81,7 @@ public class PostFacebook {
 	 */
 	
 	public String postHeader () {
-		return " Facebook: " + this.user + ": " + this.createdAt;
+		return type + ": " + this.user + ": " + this.createdAt;
 	}
 	
 	/**

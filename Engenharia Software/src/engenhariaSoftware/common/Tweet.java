@@ -71,7 +71,7 @@ public class Tweet {
 	 */
 	
 	public String tweetHeader () {
-		return this.user + ": " + this.createdAt;
+		return "Twitter: " + this.user + ": " + this.createdAt;
 	}
 	
 	/**
