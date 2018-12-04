@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Utilizador/Desktop/Twitter API/lib/twitter4j-core-4.0.7.jar"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="lib" path="C:/Users/Utilizador/Desktop/restfb-2.12.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Utilizador/Downloads/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Utilizador/Downloads/junit-4.12.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="C:/Users/Utilizador/Desktop/Javamail/javamail-1.4.7/lib/pop3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilizador/Desktop/Javamail/javamail-1.4.7/lib/mailapi.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilizador/Desktop/Javamail/jsoup-1.11.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilizador/Desktop/Javamail/javamail-1.4.7/mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilizador/Desktop/Javamail/javamail-1.4.7/lib/smtp.jar"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
