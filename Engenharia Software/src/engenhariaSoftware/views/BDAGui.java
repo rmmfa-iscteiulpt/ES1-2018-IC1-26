@@ -544,7 +544,7 @@ public class BDAGui extends JFrame {
 		String host = "outlook.office365.com";// change accordingly
 		String mailStoreType = "pop3";
 		String username = "fatsa@iscte-iul.pt";// change accordingly
-		String password = "Ferari1998";// change accordingly
+		String password = "*******";// change accordingly
 
 //		check(host, mailStoreType, username, password);
 		
@@ -556,6 +556,41 @@ public class BDAGui extends JFrame {
 			properties.put("mail.pop3.host", host);
 			properties.put("mail.pop3.port", "995");
 			properties.put("mail.pop3.starttls.enable", "true");
+			
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", "smtp.office365.com");
+			props.put("mail.smtp.port", "587");
+			
+			Session session = Session.getInstance(props,
+					new javax.mail.Authenticator() {
+				@Override
+		        protected PasswordAuthentication getPasswordAuthentication() {
+		            return new PasswordAuthentication(username, password);
+		        }
+		      });
+		    session.setDebug(true);
+		    
+		    try {
+
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("fatsa@iscte-iul.pt"));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse("fatsa@iscte-iul.pt"));
+				message.setSubject("Test");
+				message.setText("HI");
+
+				Transport.send(message);
+
+				System.out.println("Done");
+
+			} catch (MessagingException e) {
+				throw new RuntimeException(e);
+			}
+
+			
+			
 			Session emailSession = Session.getDefaultInstance(properties);
 
 			//create the POP3 store object and connect with the pop server
@@ -629,7 +664,7 @@ public class BDAGui extends JFrame {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				textAreaEmail.setText("");
-
+				
 			}
 		});
 		
