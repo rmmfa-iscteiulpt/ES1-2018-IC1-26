@@ -1,7 +1,17 @@
 package engenhariaSoftware.common;
 
 import java.util.Date;
-
+	/**
+	 * @author Frederico
+	 * @author Sara
+	 * @author Rita
+	 * @author Filipe
+	 * @since December,2018
+	 * 
+	 *  The TweetPostEmail class is the class that send a email.
+	 *      
+	 *
+	 */
 public class TweetPostEmail {
 	
 	private String type;
@@ -29,16 +39,36 @@ public class TweetPostEmail {
 		this.createdAt = createdAt;
 	}
 	
+	/**
+	 * 
+	 * getNormalDate,
+	 * Getter for the date.
+	 * @return normalDate
+	 * 
+	 */
+	
 	public String getNormalDate() {
 		return this.normalDate;
 	}
+	
+	/**
+	 * 
+	 * setNormalDate,
+	 * Getter for the date.
+	 * @param date this is the date that was set
+	 * 
+	 */
 	
 	public void setNormalDate(String date) {
 		this.normalDate = date;
 	}
 	
-	/*
-	 * Getter for the type
+	/**
+	 * 
+	 * getType,
+	 * Getter for the type.
+	 * @return type this is the type of post
+	 * 
 	 */
 	public String getType() {
 		return this.type;
@@ -46,7 +76,7 @@ public class TweetPostEmail {
 	
 	/**
 	 * getUserName,
-	 * Getter for user name.
+	 * Getter for user username.
 	 * @return the user
 	 */
 	
@@ -56,7 +86,7 @@ public class TweetPostEmail {
 	
 	/**
 	 * getText,
-	 * Getter for the text of the facebook Post.
+	 * Getter for the text of the Post.
 	 * @return the text
 	 */
 	

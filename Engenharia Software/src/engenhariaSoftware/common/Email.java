@@ -2,12 +2,33 @@ package engenhariaSoftware.common;
 
 import java.util.Date;
 
+	/**
+	 *@author Frederico
+	 * @author Sara
+	 * @author Rita
+	 * @author Filipe
+	 * @since December,2018
+	 * 
+	 *  The Email class is the class access to email information.   
+	 *
+	 */
+
 public class Email {
 
 	private String user;
 	private String content;
 	private long id;
 	private Date date;
+	
+	/**
+	 * Email constructor,
+	 * initialization user, content, id, date.
+	 * 
+	 * @param user this is the email of the user
+	 * @param content is the content of the email
+	 * @param id is the id of the email
+	 * @param date this is the date of the email
+	 */
 	
 	public Email(String user, String content, long id, Date date) {
 		super();
@@ -27,9 +48,9 @@ public class Email {
 	}
 	
 	/**
-	 * getText,
-	 * Getter for the tweet text.
-	 * @return the text
+	 * getContent,
+	 * Getter for the content of the email.
+	 * @return the content
 	 */
 	
 	public String getContent() {
@@ -38,7 +59,7 @@ public class Email {
 	
 	/**
 	 * getId,
-	 * Getter for the tweet id.
+	 * Getter for the email id.
 	 * @return id
 	 */
 	
@@ -47,8 +68,8 @@ public class Email {
 	}
 	
 	/**
-	 * tweetHeader,
-	 * Getter for the tweet header.
+	 * mailHeader,
+	 * Getter for the email header.
 	 * @return user and date of creation
 	 */
 	
@@ -57,7 +78,7 @@ public class Email {
 	}
 	
 	/**
-	 * getCreatedAt,
+	 * getDate,
 	 * Getter for the date of creation.
 	 * @return date of creation
 	 */

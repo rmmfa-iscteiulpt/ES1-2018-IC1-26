@@ -1,14 +1,17 @@
 package engenhariaSoftware.common;
 
 import java.util.Date;
-/**
- * @author Sara
- * @since November,2018
- * 
- *  The Facebook class access to academic information made available in Facebook.
- *      
- *
- */
+	/**
+	 * @author Frederico
+	 * @author Sara
+	 * @author Rita
+	 * @author Filipe
+	 * @since November,2018
+	 * 
+	 *  The Facebook class access to academic information made available in Facebook.
+	 *      
+	 *
+	 */
 public class PostFacebook {
 	
 	private String user;

@@ -14,7 +14,30 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+	/**
+	 *@author Frederico
+	 * @author Sara
+	 * @author Rita
+	 * @author Filipe
+	 * @since December,2018
+	 * 
+	 *  The CheckEmail class is the class that see the email box.
+	 *      
+	 *
+	 */
+
 public class CheckEmail {
+	
+	/**
+	 * check,
+	 * check what is the host, storeType, ser and password
+	 * @param host is the type of email host
+	 * @param storeType is the Type of Store email
+	 * @param user is the user that are using the email
+	 * @param password is the password of the user
+	 * 
+	 */
+	
 	public static void check(String host, String storeType, String user,
 			String password) 
 	{
@@ -64,6 +87,12 @@ public class CheckEmail {
 		}
 	}
 
+	/**
+	 * Main to entry in the application.
+	 * @param args gives the argument to use
+	 * 
+	 */
+	
 	public static void main(String[] args) {
 
 		String host = "outlook.office365.com";// change accordingly

@@ -2,14 +2,17 @@ package engenhariaSoftware.common;
 
 import java.util.Date;
 
-/**
- * @author Frederico
- * @since November,2018
- * 
- *  The Tweet class access to academic information made available in Twitter.
- *      
- *
- */
+	/**
+	 * @author Frederico
+	 * @author Sara
+	 * @author Rita
+	 * @author Filipe
+	 * @since November,2018
+	 * 
+	 *  The Tweet class access to academic information made available in Twitter.
+	 *      
+	 *
+	 */
 
 public class Tweet {
 

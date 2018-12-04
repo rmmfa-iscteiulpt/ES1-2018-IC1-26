@@ -95,19 +95,19 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-/**
- * @author Frederico
- * @author Sara
- * @author Rita
- * @author Filipe
- * @since October,2018
- * @version 2.0
- * 
- *  The BDAGui class access to academic information made available through various channels,
- *  such as Email, Facebook and Twitter
- *      
- *
- */
+	/**
+	 * @author Frederico
+	 * @author Sara
+	 * @author Rita
+	 * @author Filipe
+	 * @since October,2018
+	 * @version 2.1
+	 * 
+	 *  The BDAGui class access to academic information made available through various channels,
+	 *  such as Email, Facebook and Twitter.
+	 *      
+	 *
+	 */
 
 public class BDAGui extends JFrame {
 
