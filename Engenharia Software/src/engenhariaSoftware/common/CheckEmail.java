@@ -97,8 +97,8 @@ public class CheckEmail {
 
 		String host = "outlook.office365.com";// change accordingly
 		String mailStoreType = "pop3";
-		String username = "fatsa@iscte-iul.pt";// change accordingly
-		String password = "Ferari1998";// change accordingly
+		String username = "sjhai@iscte-iul.pt";// change accordingly
+		String password = "Streetlights0";// change accordingly
 
 		check(host, mailStoreType, username, password);
 
