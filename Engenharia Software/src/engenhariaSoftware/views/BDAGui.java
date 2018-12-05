@@ -156,7 +156,15 @@ public class BDAGui extends JFrame {
 	private JButton btnSendEmail;
 	private JButton btnComposeEmail;
 	private JPanel panelSendEmail;
-
+	private JTextArea textAreaComposeEmail;
+	private JTextField txtSubject;
+	private JTextField textFieldUsername;
+	private JPanel panelLogin;
+	private JTextField textFieldPassword;
+	private JButton btnLogin;
+	private JScrollPane scrollPaneEmails;
+	private JScrollPane scrollPaneEmail;
+	
 	//Feed Coletivo
 	private DefaultListModel<String> modelFeedColetivo = new DefaultListModel<>();
 	private JTextArea textAreaFeedColetivo;
@@ -175,8 +183,9 @@ public class BDAGui extends JFrame {
 	private JTextField textFieldDay;
 	private JTextField textFieldMonth;
 	private JTextField textFieldYear;
-	private JTextArea textAreaComposeEmail;
-	private JTextField txtSubject;
+	
+	
+
 	
 
 	
@@ -973,6 +982,7 @@ public class BDAGui extends JFrame {
 
 	private void createEventsMail() {
 		panelSendEmail.setVisible(false);
+		
 //		textFieldTo.setVisible(false);
 //		scrollPaneComposeEmail.setVisible(false);
 //		btnSendEmail.setVisible(false);
@@ -982,9 +992,9 @@ public class BDAGui extends JFrame {
 				modelEmail.clear();
 				host = "outlook.office365.com";// change accordingly
 				mailStoreType = "pop3";
-				username = "fdtmg@iscte-iul.pt";// change accordingly
-				password = "*******";// change accordingly
-
+//				username = "fdtmg@iscte-iul.pt";// change accordingly
+//				password = "*******";// change accordingly
+				
 				try {
 					//create properties field
 					Properties properties = new Properties();
@@ -1015,11 +1025,17 @@ public class BDAGui extends JFrame {
 
 
 				} catch (NoSuchProviderException e) {
-					e.printStackTrace();
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
 				} catch (MessagingException e) {
-					e.printStackTrace();
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
 				}
 				for(int i = messages.length-1; i > messages.length-20 ; i--) {
 					try {
@@ -1051,6 +1067,15 @@ public class BDAGui extends JFrame {
 
 		});
 		
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				username = textFieldUsername.getText();
+				password = textFieldPassword.getText();
+				panelLogin.setVisible(false);
+				
+			}
+		});
+		
 		btnComposeEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				panelSendEmail.setVisible(true);
@@ -1061,8 +1086,8 @@ public class BDAGui extends JFrame {
 		btnSendEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				String username = "fdtmg@iscte-iul.pt";
-				String password = "FFpp1479638";
+//				String username = "fdtmg@iscte-iul.pt";
+//				String password = "FFpp1479638";
 				
 				Properties props = new Properties();
 				props.put("mail.smtp.auth", "true");
@@ -1098,8 +1123,11 @@ public class BDAGui extends JFrame {
 
 					System.out.println("Email enviado para: " + to);
 				} catch (AddressException e) {
+					System.out.println("Endereço incorreto ou inexistente!");
 				} catch (MessagingException e) {
-					e.printStackTrace();
+					System.out.println("Não foi possível enviar email. Verifique o endereço do destinatário");
+					panelSendEmail.setVisible(true);
+					
 				}
 				
 				txtSubject.setText("");
@@ -1610,9 +1638,11 @@ public class BDAGui extends JFrame {
 		panelEmail.setBackground(new Color(70, 130, 180));
 		tabbedPane.addTab("Outlook", null, panelEmail, null);
 
-		JScrollPane scrollPaneEmails = new JScrollPane();
+		scrollPaneEmails = new JScrollPane();
+		scrollPaneEmails.setAlignmentY(Component.TOP_ALIGNMENT);
+		scrollPaneEmails.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		JScrollPane scrollPaneEmail = new JScrollPane();
+		scrollPaneEmail = new JScrollPane();
 
 		btnMyFeedEmail = new JButton("My Mail Box");
 		btnMyFeedEmail.setFont(new Font("Verdana", Font.BOLD, 11));
@@ -1624,6 +1654,8 @@ public class BDAGui extends JFrame {
 		btnComposeEmail.setFont(new Font("Verdana", Font.BOLD, 11));
 		
 		panelSendEmail = new JPanel();
+		
+		panelLogin = new JPanel();
 		GroupLayout gl_panelEmail = new GroupLayout(panelEmail);
 		gl_panelEmail.setHorizontalGroup(
 			gl_panelEmail.createParallelGroup(Alignment.LEADING)
@@ -1643,25 +1675,86 @@ public class BDAGui extends JFrame {
 								.addComponent(scrollPaneEmails, GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
 								.addComponent(scrollPaneEmail))))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panelSendEmail, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panelSendEmail, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+						.addComponent(panelLogin, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panelEmail.setVerticalGroup(
 			gl_panelEmail.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelEmail.createSequentialGroup()
-					.addContainerGap(22, Short.MAX_VALUE)
+					.addContainerGap(15, Short.MAX_VALUE)
 					.addGroup(gl_panelEmail.createParallelGroup(Alignment.BASELINE)
 						.addComponent(scrollPaneEmails, GroupLayout.PREFERRED_SIZE, 379, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnMyFeedEmail)
 						.addComponent(panelSendEmail, GroupLayout.PREFERRED_SIZE, 379, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelEmail.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel_6)
-						.addComponent(scrollPaneEmail, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panelEmail.createSequentialGroup()
+							.addComponent(lblNewLabel_6)
+							.addGap(10))
+						.addComponent(panelLogin, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPaneEmail, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(btnComposeEmail)
-					.addContainerGap(14, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		
+		JTextField txtPassword = new JTextField();
+		txtPassword.setEditable(false);
+		txtPassword.setText("Password:");
+		txtPassword.setFont(new Font("Verdana", Font.BOLD, 11));
+		txtPassword.setColumns(10);
+		
+		textFieldPassword = new JTextField();
+		textFieldPassword.setFont(new Font("Verdana", Font.PLAIN, 11));
+		textFieldPassword.setColumns(10);
+		
+		textFieldUsername = new JTextField();
+		textFieldUsername.setFont(new Font("Verdana", Font.PLAIN, 11));
+		textFieldUsername.setColumns(10);
+		
+		JTextField txtUsername = new JTextField();
+		txtUsername.setEditable(false);
+		txtUsername.setText("Username:");
+		txtUsername.setFont(new Font("Verdana", Font.BOLD, 11));
+		txtUsername.setColumns(10);
+		
+		btnLogin = new JButton("Login");
+		btnLogin.setFont(new Font("Verdana", Font.BOLD, 11));
+		GroupLayout gl_panelLogin = new GroupLayout(panelLogin);
+		gl_panelLogin.setHorizontalGroup(
+			gl_panelLogin.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelLogin.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelLogin.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelLogin.createSequentialGroup()
+							.addGroup(gl_panelLogin.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtPassword, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panelLogin.createParallelGroup(Alignment.LEADING)
+								.addComponent(textFieldUsername, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+								.addComponent(textFieldPassword, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
+						.addComponent(btnLogin, Alignment.TRAILING))
+					.addContainerGap())
+		);
+		gl_panelLogin.setVerticalGroup(
+			gl_panelLogin.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelLogin.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelLogin.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panelLogin.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txtPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnLogin)
+					.addContainerGap(50, Short.MAX_VALUE))
+		);
+		panelLogin.setLayout(gl_panelLogin);
 		
 		JTextField txtTo = new JTextField();
 		txtTo.setEditable(false);
