@@ -15,7 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 	/**
-	 *@author Frederico
+	 * @author Frederico
 	 * @author Sara
 	 * @author Rita
 	 * @author Filipe

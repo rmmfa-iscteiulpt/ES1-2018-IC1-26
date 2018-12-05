@@ -22,7 +22,7 @@ public class Tweet {
 	private Date createdAt;
 	
 	/**
-	 * Tweet constructor ,
+	 * Tweet constructor,
 	 * initialization user, text, id, createAt.
 	 * @param user this is the username 
 	 * @param text this is what the username wrote

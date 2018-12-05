@@ -226,9 +226,12 @@ public class BDAGui extends JFrame {
 
 	}
 
-	/*
-	 * This method contains all of the code for creating events for the "Feed Coletivo" app.
+	/**
+	 * createEventsFeedColetivo, 
+	 * create events for the "Feed Coletivo" app.
+	 * @throws TwitterException
 	 */
+	
 	private void createEventsFeedColetivo() throws TwitterException {
 
 		//Facebook
@@ -965,7 +968,7 @@ public class BDAGui extends JFrame {
 
 	/**
 	 * createEventsMail, 
-	 * This method contains all of the code for creating events for the Outlook app.
+	 * create events for the Outlook app.
 	 */
 
 	private void createEventsMail() {

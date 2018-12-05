@@ -9,7 +9,7 @@ import java.util.Date;
 	 * @author Filipe
 	 * @since December,2018
 	 * 
-	 *  The Email class is the class access to email information.   
+	 *  The Email class is the class that access to email information.   
 	 *
 	 */
 
