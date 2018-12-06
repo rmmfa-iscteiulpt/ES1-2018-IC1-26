@@ -95,6 +95,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.swing.JPasswordField;
 	/**
 	 * @author Frederico
 	 * @author Sara
@@ -128,6 +129,8 @@ public class BDAGui extends JFrame {
 	private JButton btnAEISCTETwitter;
 	private JButton btnBiblioISCTETwitter;
 	private JScrollPane scrollPaneTweet;
+	private JButton btnFavorite;
+	private String selectedValueTwitter;
 
 	//Facebook
 
@@ -160,7 +163,6 @@ public class BDAGui extends JFrame {
 	private JTextField txtSubject;
 	private JTextField textFieldUsername;
 	private JPanel panelLogin;
-	private JTextField textFieldPassword;
 	private JButton btnLogin;
 	private JScrollPane scrollPaneEmails;
 	private JScrollPane scrollPaneEmail;
@@ -183,12 +185,15 @@ public class BDAGui extends JFrame {
 	private JTextField textFieldDay;
 	private JTextField textFieldMonth;
 	private JTextField textFieldYear;
-	
-	
-
-	
-
-	
+	private JPasswordField textFieldPassword;
+	private JPanel panelLoginFeedColetivo;
+	private JTextField textFieldUserNameFC;
+	private JPasswordField passwordFieldPasswordFC;
+	private JButton btnLoginFC;
+	private Message[] messagesFC;
+	private Folder emailFolderFC;
+	private Store storeFC;
+	private String hostFC;
 
 	/**
 	 * Main to launch the application.
@@ -196,14 +201,13 @@ public class BDAGui extends JFrame {
 	 * 
 	 */
 
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					BDAGui frame = new BDAGui();
 					frame.setVisible(true);
-					frame.setSize(1059, 645);
+					frame.setSize(1059, 665);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -242,6 +246,7 @@ public class BDAGui extends JFrame {
 	 */
 	
 	private void createEventsFeedColetivo() throws TwitterException {
+		
 
 		//Facebook
 
@@ -326,51 +331,11 @@ public class BDAGui extends JFrame {
 					listaPostsFeedColetivo.add(obj1);
 				}
 				
-				modelEmail.clear();
-				host = "outlook.office365.com";// change accordingly
+				hostFC = "outlook.office365.com";// change accordingly
 				mailStoreType = "pop3";
-				username = "fdtmg@iscte-iul.pt";// change accordingly
-				password = "******";// change accordingly
-
-				try {
-					//create properties field
-					Properties properties = new Properties();
-
-					properties.put("mail.pop3.host", host);
-					properties.put("mail.pop3.port", "995");
-					properties.put("mail.pop3.starttls.enable", "true");
-
-					Properties props = new Properties();
-					props.put("mail.smtp.auth", "true");
-					props.put("mail.smtp.starttls.enable", "true");
-					props.put("mail.smtp.host", "smtp.office365.com");
-					props.put("mail.smtp.port", "587");
-
-					Session emailSession = Session.getDefaultInstance(properties);
-
-					//create the POP3 store object and connect with the pop server
-					store = emailSession.getStore("pop3s");
-
-					store.connect(host, username, password);
-
-					//create the folder object and open it
-					emailFolder = store.getFolder("INBOX");
-					emailFolder.open(Folder.READ_ONLY);
-
-					// retrieve the messages from the folder in an array and print it
-					messages = emailFolder.getMessages();
-
-
-				} catch (NoSuchProviderException e) {
-					e.printStackTrace();
-				} catch (MessagingException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				for(int i = messages.length-1; i > messages.length-20 ; i--) {
+				for(int i = messagesFC.length-1; i > messagesFC.length-20 ; i--) {
 					try {
-						Message message = messages[i];
+						Message message = messagesFC[i];
 						Address user = message.getFrom()[0];
 						username = user.toString();
 //						String text = message.getContent().toString();
@@ -388,13 +353,85 @@ public class BDAGui extends JFrame {
 					}
 				}
 				try {
-					emailFolder.close(false);
-					store.close();
+					emailFolderFC.close(false);
+					storeFC.close();
 				} catch (MessagingException e) {
 					//					e.printStackTrace();
 				}
 			}
 
+		});
+		
+		modelFeedColetivo.addElement("É necessário fazer login.");
+
+		
+		btnLoginFC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String usernameFC = textFieldUserNameFC.getText();
+				char[] passwordChars = passwordFieldPasswordFC.getPassword();
+				String passwordFC = new String(passwordChars);
+				
+				modelFeedColetivo.clear();
+				hostFC = "outlook.office365.com";// change accordingly
+				mailStoreType = "pop3";
+//				username = "fdtmg@iscte-iul.pt";// change accordingly
+//				password = "*******";// change accordingly
+				
+				try {
+					//create properties field
+					Properties properties = new Properties();
+
+					properties.put("mail.pop3.host", hostFC);
+					properties.put("mail.pop3.port", "995");
+					properties.put("mail.pop3.starttls.enable", "true");
+
+					Properties props = new Properties();
+					props.put("mail.smtp.auth", "true");
+					props.put("mail.smtp.starttls.enable", "true");
+					props.put("mail.smtp.host", "smtp.office365.com");
+					props.put("mail.smtp.port", "587");
+
+//					Session emailSession = Session.getDefaultInstance(properties);
+					Session emailSession = Session.getInstance(props,
+							new javax.mail.Authenticator() {
+						@Override
+				        protected PasswordAuthentication getPasswordAuthentication() {
+				            return new PasswordAuthentication(usernameFC, passwordFC);
+				        }
+						
+				    });
+
+					//create the POP3 store object and connect with the pop server
+					storeFC = emailSession.getStore("pop3s");
+
+					storeFC.connect(hostFC, username, password);
+
+					//create the folder object and open it
+					emailFolderFC = storeFC.getFolder("INBOX");
+					emailFolderFC.open(Folder.READ_ONLY);
+
+					// retrieve the messages from the folder in an array and print it
+					messagesFC = emailFolderFC.getMessages();
+					btnComposeEmail.setVisible(true);
+					modelEmail.clear();
+
+				} catch (NoSuchProviderException e) {
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
+				} catch (MessagingException e) {
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
+				} catch (Exception e) {
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
+				}
+				panelLoginFeedColetivo.setVisible(false);
+				textFieldUsername.setText("");
+				textFieldPassword.setText("");
+			}
 		});
 
 		chckbxFacebook.addItemListener(new ItemListener() {
@@ -982,67 +1019,17 @@ public class BDAGui extends JFrame {
 
 	private void createEventsMail() {
 		panelSendEmail.setVisible(false);
-		
-//		textFieldTo.setVisible(false);
-//		scrollPaneComposeEmail.setVisible(false);
-//		btnSendEmail.setVisible(false);
+		btnComposeEmail.setVisible(false);
+		modelEmail.addElement("É necessário fazer login.");
 
 		btnMyFeedEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				modelEmail.clear();
-				host = "outlook.office365.com";// change accordingly
-				mailStoreType = "pop3";
-//				username = "fdtmg@iscte-iul.pt";// change accordingly
-//				password = "*******";// change accordingly
-				
-				try {
-					//create properties field
-					Properties properties = new Properties();
-
-					properties.put("mail.pop3.host", host);
-					properties.put("mail.pop3.port", "995");
-					properties.put("mail.pop3.starttls.enable", "true");
-
-					Properties props = new Properties();
-					props.put("mail.smtp.auth", "true");
-					props.put("mail.smtp.starttls.enable", "true");
-					props.put("mail.smtp.host", "smtp.office365.com");
-					props.put("mail.smtp.port", "587");
-
-					Session emailSession = Session.getDefaultInstance(properties);
-
-					//create the POP3 store object and connect with the pop server
-					store = emailSession.getStore("pop3s");
-
-					store.connect(host, username, password);
-
-					//create the folder object and open it
-					emailFolder = store.getFolder("INBOX");
-					emailFolder.open(Folder.READ_ONLY);
-
-					// retrieve the messages from the folder in an array and print it
-					messages = emailFolder.getMessages();
-
-
-				} catch (NoSuchProviderException e) {
-//					e.printStackTrace();
-					System.out.println("Verifique se o login foi bem efetuado.");
-					panelLogin.setVisible(true);
-				} catch (MessagingException e) {
-//					e.printStackTrace();
-					System.out.println("Verifique se o login foi bem efetuado.");
-					panelLogin.setVisible(true);
-				} catch (Exception e) {
-//					e.printStackTrace();
-					System.out.println("Verifique se o login foi bem efetuado.");
-					panelLogin.setVisible(true);
-				}
 				for(int i = messages.length-1; i > messages.length-20 ; i--) {
 					try {
 						Message message = messages[i];
 						Address user = message.getFrom()[0];
 						username = user.toString();
-//						String text = message.getContent().toString();
 						String text = getTextFromMessage(message);
 						long id = 0;
 						Date date = message.getSentDate();
@@ -1070,9 +1057,67 @@ public class BDAGui extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				username = textFieldUsername.getText();
-				password = textFieldPassword.getText();
+				char[] passwordChars = textFieldPassword.getPassword();
+				password = new String(passwordChars);
 				panelLogin.setVisible(false);
+				modelEmail.clear();
+				host = "outlook.office365.com";// change accordingly
+				mailStoreType = "pop3";
+//				username = "fdtmg@iscte-iul.pt";// change accordingly
+//				password = "*******";// change accordingly
 				
+				try {
+					//create properties field
+					Properties properties = new Properties();
+
+					properties.put("mail.pop3.host", host);
+					properties.put("mail.pop3.port", "995");
+					properties.put("mail.pop3.starttls.enable", "true");
+
+					Properties props = new Properties();
+					props.put("mail.smtp.auth", "true");
+					props.put("mail.smtp.starttls.enable", "true");
+					props.put("mail.smtp.host", "smtp.office365.com");
+					props.put("mail.smtp.port", "587");
+
+//					Session emailSession = Session.getDefaultInstance(properties);
+					Session emailSession = Session.getInstance(props,
+							new javax.mail.Authenticator() {
+						@Override
+				        protected PasswordAuthentication getPasswordAuthentication() {
+				            return new PasswordAuthentication(username, password);
+				        }
+				    });
+
+					//create the POP3 store object and connect with the pop server
+					store = emailSession.getStore("pop3s");
+
+					store.connect(host, username, password);
+
+					//create the folder object and open it
+					emailFolder = store.getFolder("INBOX");
+					emailFolder.open(Folder.READ_ONLY);
+
+					// retrieve the messages from the folder in an array and print it
+					messages = emailFolder.getMessages();
+					btnComposeEmail.setVisible(true);
+					modelEmail.clear();
+
+				} catch (NoSuchProviderException e) {
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
+				} catch (MessagingException e) {
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
+				} catch (Exception e) {
+//					e.printStackTrace();
+					System.out.println("Verifique se o login foi bem efetuado.");
+					panelLogin.setVisible(true);
+				}
+				textFieldUsername.setText("");
+				textFieldPassword.setText("");
 			}
 		});
 		
@@ -1326,10 +1371,27 @@ public class BDAGui extends JFrame {
 		btnRetweet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				for(Tweet t: listaTweets) {
-					if(textAreaTweet.getText().equals(t.getText())) {
+					if(selectedValueTwitter.equals(t.tweetHeader())) {
 						try {
+							System.out.println("ID: " + t.getId());
 							twitter.retweetStatus(t.getId());
 							System.out.println("Retweet com sucesso!");
+						} catch (TwitterException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		
+		btnFavorite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for(Tweet t: listaTweets) {
+					if(selectedValueTwitter.equals(t.tweetHeader())) {
+						try {
+							System.out.println("ID: " + t.getId());
+							twitter.createFavorite(t.getId());
+							System.out.println("Tweet favoritado com sucesso!");
 						} catch (TwitterException e) {
 							e.printStackTrace();
 						}
@@ -1342,11 +1404,11 @@ public class BDAGui extends JFrame {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				textAreaTweet.setText("");
-				String selectedValue = (String) listTwitter.getSelectedValue();
+				selectedValueTwitter = (String) listTwitter.getSelectedValue();
 				System.out.println(listaTweets);
 				for(Tweet t: listaTweets) {
 					System.out.println(t.getId());
-					if(selectedValue != null && selectedValue.equals(t.tweetHeader())) {
+					if(selectedValueTwitter != null && selectedValueTwitter.equals(t.tweetHeader())) {
 						textAreaTweet.append(t.getUserName() + " | " + t.getCreatedAt());
 						textAreaTweet.append("\n\n");
 						textAreaTweet.append(t.getText());
@@ -1427,7 +1489,7 @@ public class BDAGui extends JFrame {
 		txtHomeAnounces.setBackground(Color.WHITE);
 		txtHomeAnounces.setLineWrap(true);
 		txtHomeAnounces.setWrapStyleWord(true);
-		txtHomeAnounces.setText("\r\nBom dia Academia \u00E9 uma aplica\u00E7\u00E3o agregadora de conte\u00FAdo acad\u00E9mico das aplica\u00E7\u00F5es Facebook, Twitter e Outlook desenvolvida com recurso \u00E0s API's de cada aplica\u00E7\u00E3o de forma a ir buscar dados a essas plataformas.\r\n\r\nPode consultar informa\u00E7\u00E3o separadamente por aplica\u00E7\u00E3o, ou ent\u00E3o, se preferir, tudo junto na tab \"Feed Coletivo\". Nesta tab n\u00E3o \u00E9 poss\u00EDvel enviar informa\u00E7\u00E3o (e.g. likes, emails), \u00E9 apenas para consulta.\r\n\r\nFuncionalidades v3: Twitter, Facebook, Outlook, Feed Coletivo\r\n\r\n\u00DAltima atualiza\u00E7\u00E3o: 04/12/2018");
+		txtHomeAnounces.setText("\r\nBom dia Academia \u00E9 uma aplica\u00E7\u00E3o agregadora de conte\u00FAdo acad\u00E9mico das aplica\u00E7\u00F5es Facebook, Twitter e Outlook desenvolvida com recurso \u00E0s API's de cada aplica\u00E7\u00E3o de forma a ir buscar dados a essas plataformas.\r\n\r\nPode consultar informa\u00E7\u00E3o separadamente por aplica\u00E7\u00E3o, ou ent\u00E3o, se preferir, tudo junto na tab \"Feed Coletivo\". Nesta tab n\u00E3o \u00E9 poss\u00EDvel enviar informa\u00E7\u00E3o (e.g. likes, emails), \u00E9 apenas para consulta.\r\n\r\nFuncionalidades v3: Twitter, Facebook, Outlook, Feed Coletivo\r\n\r\n\u00DAltima atualiza\u00E7\u00E3o: 06/12/2018");
 		txtHomeAnounces.setEditable(false);
 
 		JLabel lblOutlookHome = new JLabel("");
@@ -1562,6 +1624,9 @@ public class BDAGui extends JFrame {
 		scrollPaneTweet = new JScrollPane();
 
 		JScrollPane scrollPaneTweetsList = new JScrollPane();
+		
+		btnFavorite = new JButton("Favorite");
+		btnFavorite.setFont(new Font("Verdana", Font.BOLD, 11));
 
 
 
@@ -1569,57 +1634,60 @@ public class BDAGui extends JFrame {
 
 		GroupLayout gl_panelTwitter = new GroupLayout(panelTwitter);
 		gl_panelTwitter.setHorizontalGroup(
-				gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
+			gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panelTwitter.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(btnISCTEIULTwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnMyFeedTwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnAEISCTETwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnBiblioISCTETwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblTwitterLogo))
-						.addGap(18)
-						.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
-								.addComponent(scrollPaneTweetsList, GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
-								.addGroup(gl_panelTwitter.createSequentialGroup()
-										.addGap(438)
-										.addComponent(btnRetweet)
-										.addGap(0, 0, Short.MAX_VALUE))
-								.addComponent(scrollPaneTweet, GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE))
-						.addGap(18)
-						.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnSearchTwitter)
-						.addGap(14))
-				);
+					.addContainerGap()
+					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(btnISCTEIULTwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnMyFeedTwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAEISCTETwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnBiblioISCTETwitter, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblTwitterLogo))
+					.addGap(18)
+					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPaneTweetsList, GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+						.addGroup(gl_panelTwitter.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, 343, Short.MAX_VALUE)
+							.addComponent(btnFavorite)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnRetweet))
+						.addComponent(scrollPaneTweet))
+					.addGap(18)
+					.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnSearchTwitter)
+					.addGap(14))
+		);
 		gl_panelTwitter.setVerticalGroup(
-				gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
+			gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panelTwitter.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_panelTwitter.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, gl_panelTwitter.createSequentialGroup()
-										.addGap(419)
-										.addComponent(lblTwitterLogo))
-								.addGroup(Alignment.LEADING, gl_panelTwitter.createSequentialGroup()
-										.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_panelTwitter.createSequentialGroup()
-														.addComponent(btnMyFeedTwitter)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(btnISCTEIULTwitter)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(btnAEISCTETwitter)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(btnBiblioISCTETwitter))
-												.addGroup(gl_panelTwitter.createParallelGroup(Alignment.BASELINE)
-														.addComponent(scrollPaneTweetsList, GroupLayout.PREFERRED_SIZE, 364, GroupLayout.PREFERRED_SIZE)
-														.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addComponent(btnSearchTwitter)))
-										.addGap(11)
-										.addComponent(scrollPaneTweet, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(btnRetweet)))
-						.addContainerGap())
-				);
+					.addContainerGap()
+					.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelTwitter.createSequentialGroup()
+							.addGap(419)
+							.addComponent(lblTwitterLogo))
+						.addGroup(gl_panelTwitter.createSequentialGroup()
+							.addGroup(gl_panelTwitter.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelTwitter.createSequentialGroup()
+									.addComponent(btnMyFeedTwitter)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnISCTEIULTwitter)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnAEISCTETwitter)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnBiblioISCTETwitter))
+								.addGroup(gl_panelTwitter.createParallelGroup(Alignment.BASELINE)
+									.addComponent(scrollPaneTweetsList, GroupLayout.PREFERRED_SIZE, 364, GroupLayout.PREFERRED_SIZE)
+									.addComponent(textSearchFieldTwitter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(btnSearchTwitter)))
+							.addGap(11)
+							.addComponent(scrollPaneTweet, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panelTwitter.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnRetweet)
+								.addComponent(btnFavorite))))
+					.addContainerGap())
+		);
 
 		listTwitter = new JList<>(modelTwitter);
 		scrollPaneTweetsList.setViewportView(listTwitter);
@@ -1664,10 +1732,10 @@ public class BDAGui extends JFrame {
 					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
 						.addComponent(btnComposeEmail)
 						.addGroup(gl_panelEmail.createSequentialGroup()
-							.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(gl_panelEmail.createSequentialGroup()
 									.addComponent(btnMyFeedEmail, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-									.addGap(18))
+									.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE))
 								.addGroup(gl_panelEmail.createSequentialGroup()
 									.addComponent(lblNewLabel_6)
 									.addPreferredGap(ComponentPlacement.UNRELATED)))
@@ -1683,18 +1751,22 @@ public class BDAGui extends JFrame {
 		gl_panelEmail.setVerticalGroup(
 			gl_panelEmail.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelEmail.createSequentialGroup()
-					.addContainerGap(15, Short.MAX_VALUE)
+					.addGap(15)
 					.addGroup(gl_panelEmail.createParallelGroup(Alignment.BASELINE)
 						.addComponent(scrollPaneEmails, GroupLayout.PREFERRED_SIZE, 379, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnMyFeedEmail)
 						.addComponent(panelSendEmail, GroupLayout.PREFERRED_SIZE, 379, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelEmail.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelEmail.createSequentialGroup()
-							.addComponent(lblNewLabel_6)
-							.addGap(10))
-						.addComponent(panelLogin, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPaneEmail, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE))
+							.addGap(11)
+							.addGroup(gl_panelEmail.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panelEmail.createSequentialGroup()
+									.addComponent(lblNewLabel_6)
+									.addGap(10))
+								.addComponent(panelLogin, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_panelEmail.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(scrollPaneEmail, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(btnComposeEmail)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1705,10 +1777,6 @@ public class BDAGui extends JFrame {
 		txtPassword.setText("Password:");
 		txtPassword.setFont(new Font("Verdana", Font.BOLD, 11));
 		txtPassword.setColumns(10);
-		
-		textFieldPassword = new JTextField();
-		textFieldPassword.setFont(new Font("Verdana", Font.PLAIN, 11));
-		textFieldPassword.setColumns(10);
 		
 		textFieldUsername = new JTextField();
 		textFieldUsername.setFont(new Font("Verdana", Font.PLAIN, 11));
@@ -1722,6 +1790,9 @@ public class BDAGui extends JFrame {
 		
 		btnLogin = new JButton("Login");
 		btnLogin.setFont(new Font("Verdana", Font.BOLD, 11));
+		
+		textFieldPassword = new JPasswordField();
+		textFieldPassword.setFont(new Font("Verdana", Font.PLAIN, 11));
 		GroupLayout gl_panelLogin = new GroupLayout(panelLogin);
 		gl_panelLogin.setHorizontalGroup(
 			gl_panelLogin.createParallelGroup(Alignment.LEADING)
@@ -1734,8 +1805,8 @@ public class BDAGui extends JFrame {
 								.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panelLogin.createParallelGroup(Alignment.LEADING)
-								.addComponent(textFieldUsername, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-								.addComponent(textFieldPassword, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
+								.addComponent(textFieldPassword, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+								.addComponent(textFieldUsername, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
 						.addComponent(btnLogin, Alignment.TRAILING))
 					.addContainerGap())
 		);
@@ -1752,7 +1823,7 @@ public class BDAGui extends JFrame {
 						.addComponent(textFieldPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnLogin)
-					.addContainerGap(50, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panelLogin.setLayout(gl_panelLogin);
 		
@@ -1906,6 +1977,8 @@ public class BDAGui extends JFrame {
 		chckbxOutlook.setBackground(Color.DARK_GRAY);
 		chckbxOutlook.setForeground(Color.WHITE);
 		chckbxOutlook.setFont(new Font("Verdana", Font.BOLD, 11));
+		
+		panelLoginFeedColetivo = new JPanel();
 
 
 		GroupLayout gl_panelFeedColetivo = new GroupLayout(panelFeedColetivo);
@@ -1945,14 +2018,16 @@ public class BDAGui extends JFrame {
 									.addGap(18)
 									.addComponent(lblFCFacebookLogo))))
 						.addGroup(gl_panelFeedColetivo.createSequentialGroup()
-							.addGap(84)
-							.addComponent(lblFCTwitterLogo)))
-					.addContainerGap(28, Short.MAX_VALUE))
+							.addGap(18)
+							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING)
+								.addComponent(panelLoginFeedColetivo, GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+								.addComponent(lblFCTwitterLogo))))
+					.addGap(33))
 		);
 		gl_panelFeedColetivo.setVerticalGroup(
 			gl_panelFeedColetivo.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panelFeedColetivo.createSequentialGroup()
-					.addContainerGap(18, Short.MAX_VALUE)
+					.addGap(24)
 					.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.BASELINE)
 						.addGroup(gl_panelFeedColetivo.createSequentialGroup()
 							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.BASELINE)
@@ -1964,7 +2039,7 @@ public class BDAGui extends JFrame {
 								.addComponent(comboBoxDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(comboBoxMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(comboBoxYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panelFeedColetivo.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panelFeedColetivo.createSequentialGroup()
 									.addGap(15)
 									.addComponent(chckbxFacebook)
@@ -1972,25 +2047,78 @@ public class BDAGui extends JFrame {
 									.addComponent(chckbxTwitter)
 									.addGap(6)
 									.addComponent(chckbxOutlook)
-									.addPreferredGap(ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-									.addComponent(lblFCOutllokLogo)
-									.addGap(32))
+									.addGap(7)
+									.addComponent(lblFCOutllokLogo))
 								.addGroup(gl_panelFeedColetivo.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblFCFacebookLogo)
-									.addGap(38)))
-							.addGap(131))
+									.addGap(108)
+									.addComponent(lblFCFacebookLogo)))
+							.addGap(2)
+							.addComponent(lblFCTwitterLogo)
+							.addGap(15)
+							.addComponent(panelLoginFeedColetivo, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
+							.addGap(0, 0, Short.MAX_VALUE))
 						.addComponent(btnFeedDeNoticias)
 						.addGroup(gl_panelFeedColetivo.createSequentialGroup()
-							.addComponent(scrollPaneFeedColetivo, GroupLayout.PREFERRED_SIZE, 389, GroupLayout.PREFERRED_SIZE)
+							.addComponent(scrollPaneFeedColetivo, GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(scrollPaneFeedColetivoPosts, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(25, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panelFeedColetivo.createSequentialGroup()
-					.addContainerGap(416, Short.MAX_VALUE)
-					.addComponent(lblFCTwitterLogo)
-					.addGap(39))
+					.addGap(25))
 		);
+		
+		JTextField textFieldUsernameFC = new JTextField();
+		textFieldUsernameFC.setText("Username:");
+		textFieldUsernameFC.setFont(new Font("Verdana", Font.BOLD, 11));
+		textFieldUsernameFC.setEditable(false);
+		textFieldUsernameFC.setColumns(10);
+		
+		JTextField textFieldPasswordFC = new JTextField();
+		textFieldPasswordFC.setText("Password:");
+		textFieldPasswordFC.setFont(new Font("Verdana", Font.BOLD, 11));
+		textFieldPasswordFC.setEditable(false);
+		textFieldPasswordFC.setColumns(10);
+		
+		textFieldUserNameFC = new JTextField();
+		textFieldUserNameFC.setFont(new Font("Verdana", Font.PLAIN, 11));
+		textFieldUserNameFC.setColumns(10);
+		
+		passwordFieldPasswordFC = new JPasswordField();
+		passwordFieldPasswordFC.setFont(new Font("Verdana", Font.PLAIN, 11));
+		
+		btnLoginFC = new JButton("Login");
+		btnLoginFC.setFont(new Font("Verdana", Font.BOLD, 11));
+		GroupLayout gl_panelLoginFeedColetivo = new GroupLayout(panelLoginFeedColetivo);
+		gl_panelLoginFeedColetivo.setHorizontalGroup(
+			gl_panelLoginFeedColetivo.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelLoginFeedColetivo.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelLoginFeedColetivo.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelLoginFeedColetivo.createSequentialGroup()
+							.addGroup(gl_panelLoginFeedColetivo.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(textFieldPasswordFC, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+								.addComponent(textFieldUsernameFC, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panelLoginFeedColetivo.createParallelGroup(Alignment.LEADING)
+								.addComponent(passwordFieldPasswordFC, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+								.addComponent(textFieldUserNameFC, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)))
+						.addComponent(btnLoginFC, Alignment.TRAILING))
+					.addContainerGap())
+		);
+		gl_panelLoginFeedColetivo.setVerticalGroup(
+			gl_panelLoginFeedColetivo.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelLoginFeedColetivo.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelLoginFeedColetivo.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textFieldUsernameFC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldUserNameFC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panelLoginFeedColetivo.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textFieldPasswordFC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(passwordFieldPasswordFC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnLoginFC)
+					.addContainerGap(13, Short.MAX_VALUE))
+		);
+		panelLoginFeedColetivo.setLayout(gl_panelLoginFeedColetivo);
 
 		textAreaFeedColetivo = new JTextArea();
 		textAreaFeedColetivo.setFont(new Font("Verdana", Font.PLAIN, 13));
@@ -2036,7 +2164,7 @@ public class BDAGui extends JFrame {
 		JTextArea txtrAquiPodeAprender = new JTextArea();
 		txtrAquiPodeAprender.setWrapStyleWord(true);
 		txtrAquiPodeAprender.setLineWrap(true);
-		txtrAquiPodeAprender.setText("Aqui pode aprender como utilizar a aplica\u00E7\u00E3o BDA e saber sobre todas as suas funcionalidades.\r\n\r\nHome:\r\n   - Introdu\u00E7\u00E3o \u00E0 aplica\u00E7\u00E3o;\r\n   - Vers\u00E3o e funcionalidades dispon\u00EDveis;\r\n   - Data da \u00FAltima atualiza\u00E7\u00E3o.\r\n\r\nFacebook:\r\n   - \"My Feed\": Mostra os posts da p\u00E1gina do facebook.\r\n\r\nTwitter:\r\n   - \"My Feed\": Mostra os tweets mais recentes do seu feed de not\u00EDcias;\r\n   - \"ISCTE-IUL\": Mostra os tweets mais recentes da conta do ISCTE-IUL;\r\n   - \"AEISCTE\": Mostra os tweets mais recentes da conta da Associa\u00E7\u00E3o de Estudante do ISCTE-IUL;\r\n   - \"Biblioteca ISCTE\": Mostra os tweets mais recentes da conta da Biblioteca do ISCTE-IUL.\r\n   - \"Search\": Permite pesquisar por tweets que contenham a palavra introduzia pelo utilizador na barra de pesquisa;\r\n   - \"Retweet\": Permite retweetar. Para isto ser poss\u00EDvel \u00E9 necess\u00E1rio que tenha um tweet selecionado primeiro.\r\n\r\nOutlook:\r\n   - \"My Feed\": Mostra os Emails mais recentes do seu feed de not\u00EDcias;\r\n\r\nFeed Coletivo:\r\n - \r\n\r\nAbout Us:\r\n   - Informa\u00E7\u00F5es sobre os desenvolvedores desta aplica\u00E7\u00E3o.");
+		txtrAquiPodeAprender.setText("Aqui pode aprender como utilizar a aplica\u00E7\u00E3o BDA e saber sobre todas as suas funcionalidades.\r\n\r\nHome:\r\n   - Introdu\u00E7\u00E3o \u00E0 aplica\u00E7\u00E3o;\r\n   - Vers\u00E3o e funcionalidades dispon\u00EDveis;\r\n   - Data da \u00FAltima atualiza\u00E7\u00E3o.\r\n\r\nFacebook:\r\n   - \"My Feed\": Mostra os posts da p\u00E1gina do facebook.\r\n\r\nTwitter:\r\n   - \"My Feed\": Mostra os tweets mais recentes do seu feed de not\u00EDcias;\r\n   - \"ISCTE-IUL\": Mostra os tweets mais recentes da conta do ISCTE-IUL;\r\n   - \"AEISCTE\": Mostra os tweets mais recentes da conta da Associa\u00E7\u00E3o de Estudante do ISCTE-IUL;\r\n   - \"Biblioteca ISCTE\": Mostra os tweets mais recentes da conta da Biblioteca do ISCTE-IUL.\r\n   - \"Search\": Permite pesquisar por tweets que contenham a palavra introduzia pelo utilizador na barra de pesquisa;\r\n   - \"Retweet\": Permite retweetar. Para isto ser poss\u00EDvel \u00E9 necess\u00E1rio que tenha um tweet selecionado primeiro.\r\n\r\nOutlook:\r\n   - EFETUAR LOGIN PRIMEIRO;\r\n   - \"My Feed\": Mostra os Emails mais recentes do seu feed de not\u00EDcias;\r\n   - \"Compose email\": Mostra uma pequena janela para enviar um email.\r\n\r\nFeed Coletivo:\r\n   - EFETUAR LOGIN PRIMEIRO (conta Outlook);\r\n   - \"Feed de Noticias\": Mostras os posts do Facebok, os Tweets do Twitter, e os mails na sua caixa de entrada do Outlook.\r\n\r\nAbout Us:\r\n   - Informa\u00E7\u00F5es sobre os desenvolvedores desta aplica\u00E7\u00E3o.");
 		txtrAquiPodeAprender.setFont(new Font("Verdana", Font.PLAIN, 13));
 		scrollPane.setViewportView(txtrAquiPodeAprender);
 		panelHelp.setLayout(gl_panelHelp);
