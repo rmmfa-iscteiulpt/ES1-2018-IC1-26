@@ -2,12 +2,11 @@ package JUnit;
 
 import static org.junit.Assert.*;
 
-import java.sql.Date;
+import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import engenhariaSoftware.common.Email;
-import junit.framework.Assert;
 
 public class EmailTests {
 
