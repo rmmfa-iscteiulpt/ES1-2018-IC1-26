@@ -1,4 +1,4 @@
-# ES1-2018-EIC1-26
+# ES1-2018-IC1-26
 
 Rita Mendes Fonseca Nº68676
 Sara Jéssica Nº73501
