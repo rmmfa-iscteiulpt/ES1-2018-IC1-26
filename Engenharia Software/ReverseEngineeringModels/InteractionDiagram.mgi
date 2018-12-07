@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass name="engenhariaSoftware.common.Email" x="463" y="182"/>
+    <CommunicationClass name="engenhariaSoftware.common.PostFacebook"
+        x="79" y="236"/>
+    <CommunicationClass name="engenhariaSoftware.common.Tweet" x="109" y="371"/>
+    <CommunicationClass name="engenhariaSoftware.common.CheckEmail"
+        x="112" y="114"/>
+    <CommunicationClass name="engenhariaSoftware.common.TweetPostEmail"
+        x="776" y="427"/>
+    <CommunicationClass name="engenhariaSoftware.views.BDAGui" x="273" y="481">
+        <Association
+            destinationClassName="engenhariaSoftware.common.Tweet"
+            endpointName="listaTweets" kind="Simple"/>
+        <Association
+            destinationClassName="engenhariaSoftware.common.Email"
+            endpointName="listaEmail" kind="Simple"/>
+        <Association
+            destinationClassName="engenhariaSoftware.common.PostFacebook"
+            endpointName="listaPosts" kind="Simple"/>
+        <Association
+            destinationClassName="engenhariaSoftware.common.TweetPostEmail"
+            endpointName="listaPostsFeedColetivo" kind="Simple"/>
+    </CommunicationClass>
+</ClassDiagram>
