@@ -1456,6 +1456,9 @@ public class BDAGui extends JFrame {
 	 *
 	 */ 
 
+	
+	 // Não fazer 
+	
 	private void initComponents() {
 		setTitle("Bom Dia Academia");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(BDAGui.class.getResource("/engenhariaSoftware/resources/IGE.jpg")));

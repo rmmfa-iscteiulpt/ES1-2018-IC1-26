@@ -43,6 +43,7 @@ public class Email {
 	 * @return the user
 	 */
 
+
 	public String getUserName() {
 		return this.user;
 	}

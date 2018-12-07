@@ -2,6 +2,8 @@ package jUnitTests;
 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
@@ -32,5 +34,34 @@ public class EmailTests {
 		long output = test2.getId();
 		assertEquals(73501, output);
 	}
+	
+	@Test
+	public void testDate() throws ParseException {
+		String s = "07-12-2018";
+		Date d = new SimpleDateFormat("dd-MM-YYYY").parse(s);
+		Email testdate = new Email ("Sara","ISCTE",73501,d);
+		Date output = testdate.getDate();
+		assertEquals(d,output);
+		
+	}
+	
+	@Test
+	public void testMailHeader() throws ParseException {
+		String s = "07-12-2018";
+		Date d = new SimpleDateFormat("dd-MM-YYYY").parse(s);
+		Email testheader = new Email ("Sara","ISCTE",73501,d);
+		String output = "Outlook: " + testheader.getUserName() + ": " + testheader.getDate();
+		assertEquals("Outlook: Sara: " + d, output);		
+	}
+	
+	@Test
+	public void testString() {
+		Email teststring = new Email ("Sara","ISCTE",73501,new Date(0));;
+		String output = teststring.getUserName() + "-" + teststring.getContent() ;
+		assertEquals("Sara-ISCTE", output);		
 
-}
+	}
+	
+		
+	}
+
