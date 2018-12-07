@@ -102,7 +102,7 @@ import javax.swing.JPasswordField;
 	 * @author Rita
 	 * @author Filipe
 	 * @since October,2018
-	 * @version 2.1
+	 * @version 3.0
 	 * 
 	 *  The BDAGui class access to academic information made available through various channels,
 	 *  such as Email, Facebook and Twitter.
