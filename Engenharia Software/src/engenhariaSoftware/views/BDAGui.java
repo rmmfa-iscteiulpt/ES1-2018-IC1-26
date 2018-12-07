@@ -1,6 +1,5 @@
 package engenhariaSoftware.views;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,34 +14,25 @@ import com.restfb.FacebookClient;
 import com.restfb.Version;
 import com.restfb.types.Post;
 import com.restfb.types.User;
-import com.restfb.types.Payment.Item;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.Color;
-import javax.swing.SwingConstants;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 import engenhariaSoftware.common.Email;
 import engenhariaSoftware.common.PostFacebook;
@@ -50,35 +40,24 @@ import engenhariaSoftware.common.Tweet;
 import engenhariaSoftware.common.TweetPostEmail;
 
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.CardLayout;
 import javax.swing.JComboBox;
-import java.awt.FlowLayout;
 import javax.swing.JTabbedPane;
 import java.awt.Toolkit;
-import javax.swing.UIManager;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.border.CompoundBorder;
-import javax.swing.JSplitPane;
-import java.awt.GridLayout;
 import javax.swing.JCheckBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import javax.mail.Address;
